@@ -1,0 +1,30 @@
+{
+  "name": "starhs-api-proxy-aws-lambda",
+  "version": "1.0.0",
+  "description": "A proxy for the staRHs API running on AWS lambda",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda.git"
+  },
+  "keywords": [
+    "simple",
+    "social",
+    "realtime"
+  ],
+  "author": "Resourceful Humans <info@resourceful-humans.com>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda/issues"
+  },
+  "homepage": "https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#readme",
+  "dependencies": {
+    "aws-sdk": "^2.6.7",
+    "bluebird": "^3.4.6",
+    "glob": "^7.1.0",
+    "lodash": "^4.16.4"
+  }
+}
