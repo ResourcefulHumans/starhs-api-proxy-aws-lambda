@@ -3,10 +3,7 @@
 const Promise = require('bluebird')
 const api = require('./api')
 const Joi = require('joi')
-const operations = {
-  'login': require('./operations/login'),
-  'status': require('./operations/status')
-}
+const operations = require('./operations')
 
 exports.handler = (event, context, callback) => {
   let statusCode = 200
