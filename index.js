@@ -1,32 +1,43 @@
 'use strict'
 
 const Promise = require('bluebird')
-const CONTENT_TYPE = 'application/vnd.resourceful-humans.starhs.v1+json; charset=utf-8'
+const api = require('./api')
+const Joi = require('joi')
+const operations = {
+  'login': require('./operations/login'),
+  'status': require('./operations/status')
+}
 
 exports.handler = (event, context, callback) => {
   let statusCode = 200
   const done = (err, res) => {
-    if (err) console.error(err)
+    if (err && process.env.environment !== 'testing') console.error(err)
+    if (err && !(err instanceof api.HttpProblem)) {
+      err = new api.HttpProblem(err.constructor.name, err.message, 400)
+    }
     return callback(null, {
-      statusCode: err ? 400 : (res ? statusCode : 204),
-      body: err ? err.message : JSON.stringify(res),
+      statusCode: err ? err.status : (res ? statusCode : 204),
+      body: JSON.stringify(err || res),
       headers: {
-        'Content-Type': CONTENT_TYPE
+        'Content-Type': api.CONTENT_TYPE
       }
     })
   }
 
   Promise
     .try(() => {
-      if (event.headers === null || !event.headers['Content-Type']) {
-        throw new Error('Must provide Content-Type')
-      }
-      if (event.headers['Content-Type'] !== CONTENT_TYPE) {
-        throw new Error('Unsupported content type: "' + event.headers['Content-Type'] + '"')
-      }
+      api.checkContentType(event)
       const parts = event.path.split('/')
-      const body = JSON.parse(event.body)
-      throw new Error(`Unsupported action "${event.httpMethod} ${event.path}"`)
+      parts.shift()
+      const operation = parts.shift()
+      if (!operation.length || !operations[operation]) throw new api.HttpProblem('Error', `Unknown operation "${event.path}"`, 404)
+      const v = Joi.validate(event.httpMethod, Joi.string().lowercase().required().valid(['GET', 'POST']))
+      const method = v.value.toLowerCase()
+      if (v.error || !operations[operation][method]) {
+        throw new api.HttpProblem('Error', `Unsupported action "${event.httpMethod} ${event.path}"`, 400)
+      }
+      const body = event.body ? JSON.parse(event.body) : {}
+      return operations[operation][method](body, parts)
     })
     .then(res => done(null, res))
     .catch(err => done(err))

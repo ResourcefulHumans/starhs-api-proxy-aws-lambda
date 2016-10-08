@@ -4,7 +4,9 @@
   "description": "A proxy for the staRHs API running on AWS lambda",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "environment=testing ./node_modules/.bin/mocha --reporter=dot --timeout=1350 test/\\*\\*/\\*.js",
+    "test:coverage": "environment=testing ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R dot --timeout=1350 test/\\*\\*/\\*.js && rm -rf ./coverage",
+    "lint": "./node_modules/.bin/standard"
   },
   "repository": {
     "type": "git",
@@ -24,7 +26,13 @@
   "dependencies": {
     "aws-sdk": "^2.6.7",
     "bluebird": "^3.4.6",
+    "chai": "^3.5.0",
     "glob": "^7.1.0",
-    "lodash": "^4.16.4"
+    "joi": "^9.1.0",
+    "lodash": "^4.16.4",
+    "mocha": "^3.1.0"
+  },
+  "devDependencies": {
+    "standard": "^8.3.0"
   }
 }
