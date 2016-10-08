@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "environment=testing mocha --reporter=dot --timeout=1350 test/\\*\\*/\\*.js",
-    "test:coverage": "environment=testing istanbul cover _mocha --report lcovonly -- -R dot --timeout=1350 test/\\*\\*/\\*.js && rm -rf ./coverage",
+    "test:coverage": "environment=testing istanbul cover _mocha test/\\*\\*/\\*.js",
+    "test:coverage-travis": "environment=testing istanbul cover _mocha --report lcovonly -- -R dot --timeout=1350 test/\\*\\*/\\*.js && rm -rf ./coverage",
     "lint": "standard"
   },
   "repository": {

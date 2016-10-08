@@ -27,10 +27,6 @@ function HttpProblem (type, title, status, detail) {
 
 HttpProblem.prototype = Object.create(Error.prototype)
 HttpProblem.prototype.constructor = HttpProblem
-HttpProblem.prototype.toString = function () {
-  return this.type + ' ' + this.title + ': ' + this.status + ' (' + this.detail + ')'
-}
-
 HttpProblem.$context = 'https://www.ietf.org/id/draft-ietf-appsawg-http-problem-01.txt'
 
 const header = (headers, header) => {

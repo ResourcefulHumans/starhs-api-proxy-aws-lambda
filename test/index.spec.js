@@ -53,4 +53,29 @@ describe('index', () => {
       done()
     })
   })
+
+  it('should send bad request if bad body provided', done => {
+    const path = '/status'
+    const httpMethod = 'POST'
+    const body = '{bad json'
+    index.handler({
+      headers,
+      httpMethod,
+      path,
+      body
+    }, null, (err, res) => {
+      expect(err).to.equal(null)
+      expect(res.statusCode).to.equal(400)
+      expect(res.headers).to.deep.equal({
+        'Content-Type': api.CONTENT_TYPE
+      })
+      const expectedProblem = new api.HttpProblem('Error', 'Unexpected token b in JSON at position 1', 400)
+      const body = JSON.parse(res.body)
+      expect(body.name).to.equal(expectedProblem.name)
+      expect(body.error).to.equal(expectedProblem.error)
+      expect(body.title).to.equal(expectedProblem.title)
+      expect(body.$context).to.equal(expectedProblem.$context)
+      done()
+    })
+  })
 })
