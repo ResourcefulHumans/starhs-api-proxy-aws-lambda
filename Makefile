@@ -4,6 +4,7 @@
 AWS__REGION ?= "eu-central-1"
 AWS__FUNCTION_NAME ?= "staRHsAPIproxy"
 
+# TODO: envify
 archive.zip: *.js **/*.js
 	rm -f $@
 	zip -q -r $@ ./

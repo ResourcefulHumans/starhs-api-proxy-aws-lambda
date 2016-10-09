@@ -8,6 +8,8 @@ const operations = require('./operations')
 exports.handler = (event, context, callback) => {
   let statusCode = 200
   const done = (err, res) => {
+    /* istanbul ignore next */
+    if (err && process.env.environment !== 'testing') console.error(err)
     if (err) console.error(err)
     if (err && !(err instanceof api.HttpProblem)) {
       err = new api.HttpProblem(err.constructor.name, err.message, 400)
