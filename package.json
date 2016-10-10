@@ -36,6 +36,7 @@
     "jsonwebtoken": "^7.1.9",
     "lodash": "^4.16.4",
     "mockery": "^2.0.0",
+    "moment": "^2.15.1",
     "nconf": "^0.8.4",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
