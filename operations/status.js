@@ -1,5 +1,7 @@
 'use strict'
 
+// @flow
+
 const Promise = require('bluebird')
 
 const status = () => Promise.resolve({
@@ -7,6 +9,6 @@ const status = () => Promise.resolve({
   time: Date.now()
 })
 
-module.exports = {
+export default {
   post: status
 }

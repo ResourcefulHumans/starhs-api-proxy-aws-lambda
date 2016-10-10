@@ -6,6 +6,7 @@ const expect = require('chai').expect
 const index = require('../index')
 const api = require('../api')
 const headers = {'Content-type': api.CONTENT_TYPE}
+const HttpProblem = require('rheactor-models/http-problem')
 
 describe('index', () => {
   it('should send not found if operation does not exist', done => {
@@ -19,7 +20,7 @@ describe('index', () => {
       expect(res.headers).to.deep.equal({
         'Content-Type': api.CONTENT_TYPE
       })
-      const expectedProblem = new api.HttpProblem('Error', 'Unknown operation "/some/operation"', 404)
+      const expectedProblem = new HttpProblem('Error', 'Unknown operation "/some/operation"', 404)
       const body = JSON.parse(res.body)
       expect(body.name).to.equal(expectedProblem.name)
       expect(body.error).to.equal(expectedProblem.error)
@@ -44,7 +45,7 @@ describe('index', () => {
       expect(res.headers).to.deep.equal({
         'Content-Type': api.CONTENT_TYPE
       })
-      const expectedProblem = new api.HttpProblem('Error', 'Unsupported action "DELETE /status"', 400)
+      const expectedProblem = new HttpProblem('Error', 'Unsupported action "DELETE /status"', 400)
       const body = JSON.parse(res.body)
       expect(body.name).to.equal(expectedProblem.name)
       expect(body.error).to.equal(expectedProblem.error)
@@ -69,7 +70,7 @@ describe('index', () => {
       expect(res.headers).to.deep.equal({
         'Content-Type': api.CONTENT_TYPE
       })
-      const expectedProblem = new api.HttpProblem('Error', 'Unexpected token b in JSON at position 1', 400)
+      const expectedProblem = new HttpProblem('Error', 'Unexpected token b in JSON at position 1', 400)
       const body = JSON.parse(res.body)
       expect(body.name).to.equal(expectedProblem.name)
       expect(body.error).to.equal(expectedProblem.error)
