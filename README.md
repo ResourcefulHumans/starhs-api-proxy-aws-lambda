@@ -9,4 +9,4 @@
 
 [![NPM](https://nodei.co/npm/starhs-api-proxy-aws-lambda.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/starhs-api-proxy-aws-lambda/)
 
-A proxy for the staRHs API running on AWS lambda
+A proxy for the [staRHs API](https://github.com/ResourcefulHumans/staRHs-api) running on AWS lambda.
