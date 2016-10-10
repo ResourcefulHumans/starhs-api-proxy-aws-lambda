@@ -1,6 +1,6 @@
 # starhs-api-proxy-aws-lambda
   
-[![Build Status](https://travis-ci.com/ResourcefulHumans/starhs-api-proxy-aws-lambda.svg?token=4soJpdPmroe6syDk1oD3&branch=master)](https://travis-ci.com/ResourcefulHumans/starhs-api-proxy-aws-lambda)
+[![Build Status](https://travis-ci.org/ResourcefulHumans/starhs-api-proxy-aws-lambda.svg?token=4soJpdPmroe6syDk1oD3&branch=master)](https://travis-ci.org/ResourcefulHumans/starhs-api-proxy-aws-lambda)
 [![monitored by greenkeeper.io](https://img.shields.io/badge/greenkeeper.io-monitored-brightgreen.svg)](http://greenkeeper.io/) 
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![semantic-release](https://img.shields.io/badge/semver-semantic%20release-e10079.svg)](https://github.com/semantic-release/semantic-release)
