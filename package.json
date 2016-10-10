@@ -1,6 +1,5 @@
 {
   "name": "starhs-api-proxy-aws-lambda",
-  "version": "1.0.0",
   "description": "A proxy for the staRHs API running on AWS lambda",
   "main": "index.js",
   "scripts": {
@@ -10,11 +9,12 @@
     "lint": "standard && flow check",
     "build": "babel ./ -d ./build --ignore \"node_modules/,build/,coverage/,test/\"",
     "precommit": "npm run lint && npm test",
-    "commitmsg": "validate-commit-msg"
+    "commitmsg": "validate-commit-msg",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda.git"
+    "url": "https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda.git"
   },
   "keywords": [
     "simple",
@@ -57,7 +57,8 @@
     "mocha-lcov-reporter": "^1.2.0",
     "sinon": "^1.17.6",
     "standard": "^8.3.0",
-    "validate-commit-msg": "^2.8.2"
+    "validate-commit-msg": "^2.8.2",
+    "semantic-release": "^4.3.5"
   },
   "standard": {
     "parser": "babel-eslint",
