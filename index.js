@@ -24,7 +24,7 @@ export type ApiGatewayProxyEvent = {
   body: ?string
 }
 
-export function handler (event: ApiGatewayProxyEvent, context: any, callback: Function) {
+export function handler (event: ApiGatewayProxyEvent, context: Object, callback: Function) {
   let statusCode = 200
   const done = (err, res) => {
     /* istanbul ignore next */

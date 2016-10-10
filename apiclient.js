@@ -53,7 +53,7 @@ export class StaRHsAPIClient {
   /**
    * @link http://resourcefulhumans.github.io/staRHs-api/#session_login_with_userid_post
    */
-  loginWithUserId (userId: string, password: string): Promise<any> {
+  loginWithUserId (userId: string, password: string): Promise<Object> {
     const self = this
 
     return self.getLoginToken()
@@ -75,7 +75,7 @@ export class StaRHsAPIClient {
   /**
    * @link http://resourcefulhumans.github.io/staRHs-api/#profile_get_Profile_get
    */
-  getProfile (sessionToken: string): Promise<any> {
+  getProfile (sessionToken: string): Promise<Object> {
     const self = this
     return rp(
       {
@@ -91,7 +91,7 @@ export class StaRHsAPIClient {
   /**
    * @link http://resourcefulhumans.github.io/staRHs-api/#starhs_get_StarhsStatus_get
    */
-  getStaRHsStatus (sessionToken: string): Promise<any> {
+  getStaRHsStatus (sessionToken: string): Promise<Object> {
     const self = this
     return rp(
       {
@@ -104,7 +104,7 @@ export class StaRHsAPIClient {
       })
   }
 
-  static _getStaRHs (endpoint: string, sessionToken: string, opts: queryOptions): Promise<any> {
+  static _getStaRHs (endpoint: string, sessionToken: string, opts: queryOptions): Promise<Object> {
     const from = opts.from || new Date('2015-01-01')
     const to = opts.to || moment().endOf('day')
     const itemsPerPage = opts.itemsPerPage || 10
@@ -134,7 +134,7 @@ export class StaRHsAPIClient {
   /**
    * @link http://resourcefulhumans.github.io/staRHs-api/#starhs_get_StarhsReceived_get
    */
-  getStaRHsReceived (sessionToken: string, opts: queryOptions): Promise<any> {
+  getStaRHsReceived (sessionToken: string, opts: queryOptions): Promise<Object> {
     const self = this
     return self.constructor._getStaRHs(self.endpoint + '/starhs/get-StarhsReceived', sessionToken, opts)
   }
@@ -142,7 +142,7 @@ export class StaRHsAPIClient {
   /**
    * @link http://resourcefulhumans.github.io/staRHs-api/#starhs_get_StarhsShared_get
    */
-  getStaRHsShared (sessionToken: string, opts: queryOptions): Promise<any> {
+  getStaRHsShared (sessionToken: string, opts: queryOptions): Promise<Object> {
     const self = this
     return self.constructor._getStaRHs(self.endpoint + '/starhs/get-StarhsShared', sessionToken, opts)
   }
@@ -150,7 +150,7 @@ export class StaRHsAPIClient {
   /**
    * @link http://resourcefulhumans.github.io/staRHs-api/#starhs_share_Starh_get
    */
-  shareStaRH (sessionToken: string, to: string, amount: number, message: string): Promise<any> {
+  shareStaRH (sessionToken: string, to: string, amount: number, message: string): Promise<Object> {
     const self = this
     const qs = {
       ToID: to,
@@ -173,7 +173,7 @@ export class StaRHsAPIClient {
    * @link http://resourcefulhumans.github.io/staRHs-api/#profile_get_ClientEmployees_get
    * @param {String} sessionToken
    */
-  getClientEmployees (sessionToken: string, opts: queryOptions): Promise<any> {
+  getClientEmployees (sessionToken: string, opts: queryOptions): Promise<Object> {
     const self = this
     const offset = opts.offset || 0
     const itemsPerPage = opts.itemsPerPage || 100
@@ -203,7 +203,7 @@ export class StaRHsAPIClient {
    * @link http://resourcefulhumans.github.io/staRHs-api/#profile_get_PKUserFromUserID_get
    * @link http://resourcefulhumans.github.io/staRHs-api/#profile_get_new_password_get
    */
-  sendNewPassword (userId: string): Promise<any> {
+  sendNewPassword (userId: string): Promise<Object> {
     const self = this
     return rp({
       method: 'GET',
@@ -236,7 +236,7 @@ export class StaRHsAPIClient {
    *
    * @link http://resourcefulhumans.github.io/staRHs-api/#profile_set_ProfilePicture_post
    */
-  setProfilePicture (sessionToken: string, imageData: string): Promise<any> {
+  setProfilePicture (sessionToken: string, imageData: string): Promise<Object> {
     const self = this
     const imageDataBuffer = new Buffer(imageData)
     return rp({

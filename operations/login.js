@@ -10,7 +10,7 @@ const {key, user, password} = config.get('starhsapi')
 const HttpProblem = require('rheactor-models/http-problem')
 import {StaRHsAPIClient} from '../apiclient'
 
-const login = (apiClient: StaRHsAPIClient, body: any) => {
+const login = (apiClient: StaRHsAPIClient, body: Object) => {
   const schema = Joi.object().keys({
     username: Joi.string().trim().required(),
     password: Joi.string().required().trim()
