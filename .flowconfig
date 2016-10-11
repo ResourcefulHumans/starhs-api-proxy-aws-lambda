@@ -1,6 +1,8 @@
 [ignore]
 .*/node_modules/findup/.*
 .*/node_modules/semantic-release/.*
+.*/node_modules/npmconf/.*
+.*/node_modules/config-chain/.*
 
 [include]
 
