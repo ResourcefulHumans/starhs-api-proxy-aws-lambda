@@ -322,3 +322,5 @@ export class StaRHsAPIClient {
     })
   }
 }
+
+StaRHsAPIClient.Type = irreducible('StaRHsAPIClientType', (x) => x instanceof StaRHsAPIClient)

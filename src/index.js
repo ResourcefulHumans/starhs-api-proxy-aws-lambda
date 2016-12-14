@@ -8,9 +8,11 @@ const config = require('./config')
 const {key, user, password} = config.get('starhsapi')
 const apiClient = new StaRHsAPIClient(key, user, password)
 import loginHandler from './operations/login'
+import staRHsStatusHandler from './operations/starhs-status'
 import statusHandler from './operations/status'
 const operations = {
   login: loginHandler(apiClient),
+  staRHsStatus: staRHsStatusHandler(apiClient),
   status: statusHandler
 }
 const HttpProblem = require('rheactor-models/http-problem')
@@ -50,7 +52,8 @@ export function handler (event, context, callback) {
         throw new HttpProblem('Error', `Unsupported action "${event.httpMethod} ${event.path}"`, 400)
       }
       const body = event.body ? JSON.parse(event.body) : {}
-      return operations[operation][method](body, parts)
+      return api.getOptionalToken(event)
+        .then(token => operations[operation][method](body, parts, token))
     })
     .then(res => done(null, res))
     .catch(err => done(err))

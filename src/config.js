@@ -1,8 +1,6 @@
 'use strict'
 
 const nconf = require('nconf')
-const defaultEnvironment = 'production'
-const env = process.env.NODE_ENV || defaultEnvironment
 
 nconf.use('memory')
 
@@ -18,7 +16,7 @@ nconf
   })
 
 nconf.defaults({
-  'environment': env,
+  'environment': process.env.NODE_ENV,
   'mime_type': 'application/vnd.resourceful-humans.starhs.v1+json',
   'starhsapi': {
     'key': 'myapikey',
