@@ -4,7 +4,7 @@
 AWS__REGION ?= "eu-central-1"
 AWS__FUNCTION_NAME ?= "staRHsAPIproxy"
 
-archive.zip: src/*.js src/**/*.js
+archive.zip: src/*.js src/**/*.js package.json
 	rm -f $@
 	rm -rf build
 	./node_modules/.bin/babel src -d build

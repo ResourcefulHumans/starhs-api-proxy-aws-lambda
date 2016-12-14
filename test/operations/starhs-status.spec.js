@@ -3,12 +3,11 @@
 /* global describe, it */
 
 const expect = require('chai').expect
-const JsonWebToken = require('rheactor-models/jsonwebtoken')
-const jwt = require('jsonwebtoken')
 import staRHsStatusHandler from '../../src/operations/starhs-status'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {StaRHsStatusType} from 'starhs-models'
+import {generateToken} from './token'
 
 describe('/staRHsStatus', () => {
   it('should return status', () => {
@@ -36,18 +35,8 @@ describe('/staRHsStatus', () => {
       })
     }
     const status = staRHsStatusHandler(mockClient)
-    Promise.try(() => jwt.sign(
-      {
-        SessionToken: 'some-session-token'
-      },
-      'myapikey.apiuser.apipass',
-      {
-        algorithm: 'HS256',
-        issuer: 'login',
-        subject: 'some-user-name',
-        expiresIn: 60 * 60
-      }))
-      .then(token => status.post({}, [], new JsonWebToken(token))
+    generateToken()
+      .then(token => status.post({}, [], token)
         .then(
           /**
            * @param {StaRHsStatus} status
@@ -59,6 +48,7 @@ describe('/staRHsStatus', () => {
             expect(status.cycleLeft).to.equal(8)
             expect(status.totalShared).to.equal(19)
             expect(status.totalReceived).to.equal(11)
+            expect(status.$context).to.equal('https://github.com/ResourcefulHumans/staRHs-models#StaRHsStatus')
           }
         )
       )

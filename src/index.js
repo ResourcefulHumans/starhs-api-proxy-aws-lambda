@@ -10,9 +10,11 @@ const apiClient = new StaRHsAPIClient(key, user, password)
 import loginHandler from './operations/login'
 import staRHsStatusHandler from './operations/starhs-status'
 import statusHandler from './operations/status'
+import profileHandler from './operations/profile'
 const operations = {
   login: loginHandler(apiClient),
   staRHsStatus: staRHsStatusHandler(apiClient),
+  profile: profileHandler(apiClient),
   status: statusHandler
 }
 const HttpProblem = require('rheactor-models/http-problem')
