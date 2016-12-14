@@ -3,7 +3,7 @@
 /* global describe, it */
 
 const expect = require('chai').expect
-const api = require('../api')
+const api = require('../src/api')
 
 describe('api', () => {
   describe('checkContentType()', () => {

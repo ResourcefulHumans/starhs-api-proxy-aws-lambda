@@ -1,7 +1,5 @@
 'use strict'
 
-// @flow
-
 const Promise = require('bluebird')
 const api = require('./api')
 const Joi = require('joi')
@@ -17,14 +15,12 @@ const operations = {
 }
 const HttpProblem = require('rheactor-models/http-problem')
 
-export type ApiGatewayProxyEvent = {
-  headers: ?{[id:string]: string},
-  path: string,
-  httpMethod: string,
-  body: ?string
-}
-
-export function handler (event: ApiGatewayProxyEvent, context: Object, callback: Function) {
+/**
+ * @param {{headers: {Object}, path: {String}, httpMethod: {String}, body: {String}}} event
+ * @param {object} context
+ * @param {function} callback
+ */
+export function handler (event, context, callback) {
   let statusCode = 200
   const done = (err, res) => {
     /* istanbul ignore next */

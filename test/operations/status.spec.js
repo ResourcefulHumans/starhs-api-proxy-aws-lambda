@@ -3,8 +3,8 @@
 /* global describe, it */
 
 const expect = require('chai').expect
-const index = require('../../index')
-const api = require('../../api')
+const index = require('../../src/index')
+const api = require('../../src/api')
 const headers = {'Content-type': api.CONTENT_TYPE}
 
 describe('/status', () => {

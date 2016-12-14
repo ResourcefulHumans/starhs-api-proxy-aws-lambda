@@ -5,7 +5,7 @@
 const expect = require('chai').expect
 const JsonWebToken = require('rheactor-models/jsonwebtoken')
 const jwt = require('jsonwebtoken')
-import loginHandler from '../../operations/login'
+import loginHandler from '../../src/operations/login'
 const HttpProblem = require('rheactor-models/http-problem')
 
 describe('/login', () => {

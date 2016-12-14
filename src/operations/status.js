@@ -1,7 +1,5 @@
 'use strict'
 
-// @flow
-
 const Promise = require('bluebird')
 
 const status = () => Promise.resolve({

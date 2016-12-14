@@ -1,16 +1,18 @@
 'use strict'
 
-// @flow
-
 const Joi = require('joi')
 const jwt = require('jsonwebtoken')
 const JsonWebToken = require('rheactor-models/jsonwebtoken')
 const config = require('../config')
 const {key, user, password} = config.get('starhsapi')
 const HttpProblem = require('rheactor-models/http-problem')
-import {StaRHsAPIClient} from '../apiclient'
 
-const login = (apiClient: StaRHsAPIClient, body: Object) => {
+/**
+ * @param {StaRHsAPIClient} apiClient
+ * @param {object} body
+ * @returns {Promise.<JsonWebToken>}
+ */
+const login = (apiClient, body) => {
   const schema = Joi.object().keys({
     username: Joi.string().trim().required(),
     password: Joi.string().required().trim()
@@ -25,18 +27,20 @@ const login = (apiClient: StaRHsAPIClient, body: Object) => {
       {
         SessionToken: session.SessionToken
       },
-        key + '.' + user + '.' + password,
+      key + '.' + user + '.' + password,
       {
         algorithm: 'HS256',
         issuer: 'login',
         subject: v.value.username,
         expiresIn: 60 * 60
-      }
-      )
+      })
     )
     .then(token => new JsonWebToken(token))
 }
 
-export default (apiClient: StaRHsAPIClient) => ({
+/**
+ * @param {StaRHsAPIClient} apiClient
+ */
+export default (apiClient) => ({
   post: login.bind(null, apiClient)
 })
