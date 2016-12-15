@@ -20,13 +20,13 @@ const staRHsStatus = (apiClient, body, parts, token) => {
        * @param {{PKUser: {String}, PKClient: {String}, Forename: {String}, Name: {String}, Kunde1: {String}, Kunde2: {String}, CycleFrom: {String}, CycleTo: {String}, CycleType: {String}, CycleName: {String}, CycleStaRHsToShare: {Number}, YouHaveShared: {Number}, YouHaveReceived: {Number}, YouHaveLeft: {Number}, TotalShared: {Number}, TotalReceived: {Number}, ShowStarMap: {Boolean}}} response
        */
       response => {
-        return new StaRHsStatus(
-          response.YouHaveShared,
-          response.YouHaveReceived,
-          response.YouHaveLeft,
-          response.TotalShared,
-          response.TotalReceived
-        )
+        return new StaRHsStatus({
+          cycleShared: response.YouHaveShared,
+          cycleReceived: response.YouHaveReceived,
+          cycleLeft: response.YouHaveLeft,
+          totalShared: response.TotalShared,
+          totalReceived: response.TotalReceived
+        })
       }
     )
 }
