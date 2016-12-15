@@ -4,21 +4,7 @@ import Promise from 'bluebird'
 import {forIn} from 'lodash'
 import URIValue from 'rheactor-value-objects/uri'
 import {Object as ObjectType} from 'tcomb'
-
-/**
- * @param model
- * @param url
- * @param context
- */
-const addLink = (model, url, context) => {
-  URIValue.Type(url)
-  URIValue.Type(context)
-  const u = url.toString()
-  model.$links.push({
-    href: u,
-    $context: context.toString()
-  })
-}
+import {addLink} from '../api'
 
 /**
  * @param {URIValue} mountURL

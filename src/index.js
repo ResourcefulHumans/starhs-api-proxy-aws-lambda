@@ -8,9 +8,8 @@ const config = require('./config')
 const {key, user, password} = config.get('starhsapi')
 const apiClient = new StaRHsAPIClient(key, user, password)
 import indexHandler from './operations/apiindex'
-import loginHandler from './operations/login'
+import {handler as loginHandler} from './operations/login'
 import staRHsStatusHandler from './operations/starhs-status'
-import {StaRHsStatus, Profile} from 'starhs-models'
 import {handler as statusHandler, Status} from './operations/status'
 import profileHandler from './operations/profile'
 import JsonWebToken from 'rheactor-models/jsonwebtoken'
@@ -19,11 +18,9 @@ const mountURL = new URIValue(config.get('mount_url'))
 const operations = {
   index: indexHandler(mountURL, {
     'status': Status.$context,
-    'login': new URIValue(JsonWebToken.$context),
-    'profile': Profile.$context,
-    'staRHsStatus': StaRHsStatus.$context
+    'login': new URIValue(JsonWebToken.$context)
   }),
-  login: loginHandler(apiClient),
+  login: loginHandler(mountURL, apiClient),
   staRHsStatus: staRHsStatusHandler(apiClient),
   profile: profileHandler(apiClient),
   status: statusHandler

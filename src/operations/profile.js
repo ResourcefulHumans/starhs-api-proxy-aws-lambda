@@ -5,6 +5,7 @@ import {StaRHsAPIClient} from '../apiclient'
 import {Profile} from 'starhs-models'
 import URIValue from 'rheactor-value-objects/uri'
 import EmailValue from 'rheactor-value-objects/email'
+import {addLink} from '../api'
 
 /**
  * @param {StaRHsAPIClient} apiClient

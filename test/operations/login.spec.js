@@ -2,11 +2,20 @@
 
 /* global describe, it */
 
-const expect = require('chai').expect
-const JsonWebToken = require('rheactor-models/jsonwebtoken')
-const jwt = require('jsonwebtoken')
-import loginHandler from '../../src/operations/login'
-const HttpProblem = require('rheactor-models/http-problem')
+import {expect} from 'chai'
+import JsonWebToken from 'rheactor-models/jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import {handler as loginHandler, LoginSuccess} from '../../src/operations/login'
+import HttpProblem from 'rheactor-models/http-problem'
+import URIValue from 'rheactor-value-objects/uri'
+import {filter, head} from 'lodash/fp'
+import {StaRHsStatus, Profile} from 'starhs-models'
+const mountURL = new URIValue('https://api.example.com/')
+
+const itShouldHaveLinkTo = (response, model) => {
+  const link = head(filter({$context: model.$context.toString()})(response.$links))
+  expect(link.$context).to.equal(model.$context.toString())
+}
 
 describe('/login', () => {
   it('should return a token', () => {
@@ -14,27 +23,35 @@ describe('/login', () => {
       username: 'someuser',
       password: 'somepass'
     }
-    const login = loginHandler({
-      loginWithUserId: (username, password) => {
-        expect(username).to.equal(body.username)
-        expect(password).to.equal(body.password)
-        return Promise.resolve({
-          SessionToken: 'abc'
-        })
+    const login = loginHandler(
+      mountURL,
+      {
+        loginWithUserId: (username, password) => {
+          expect(username).to.equal(body.username)
+          expect(password).to.equal(body.password)
+          return Promise.resolve({
+            SessionToken: 'abc'
+          })
+        }
       }
-    })
+    )
     return login.post(body)
-      .then(token => {
-        expect(token).to.be.instanceof(JsonWebToken)
-        expect(token.iss).to.equal('login')
-        expect(token.sub).to.equal(body.username)
+      .then(success => {
+        expect(success).to.be.instanceof(LoginSuccess)
+        // Validate token
+        expect(success.token).to.be.instanceof(JsonWebToken)
+        expect(success.token.iss).to.equal('login')
+        expect(success.token.sub).to.equal(body.username)
         const inOnHourinSeconds = Math.round((Date.now() + (60 * 60 * 1000)) / 1000)
-        expect(Math.round(new Date(token.exp).getTime() / 1000)).to.be.within(inOnHourinSeconds - 10, inOnHourinSeconds + 10)
-        jwt.verify(token.token, 'myapikey.apiuser.apipass')
+        expect(Math.round(new Date(success.token.exp).getTime() / 1000)).to.be.within(inOnHourinSeconds - 10, inOnHourinSeconds + 10)
+        jwt.verify(success.token.token, 'myapikey.apiuser.apipass')
+        // Validate links
+        itShouldHaveLinkTo(success, Profile)
+        itShouldHaveLinkTo(success, StaRHsStatus)
       })
   })
   it('should throw an exception if required data is missing', () => {
-    const login = loginHandler({})
+    const login = loginHandler(mountURL, {})
     const scenarios = [
       [{}, 'ValidationError: child "username" fails because ["username" is required]'],
       [{username: 'foo'}, 'ValidationError: child "password" fails because ["password" is required]'],
@@ -55,7 +72,7 @@ describe('/login', () => {
     }
   })
   it('should throw an exception if extra data is passed', () => {
-    const login = loginHandler({})
+    const login = loginHandler(mountURL, {})
     try {
       login.post({username: 'foo', password: 'bar', extra: 'buzz'})
     } catch (err) {

@@ -18,6 +18,17 @@ export class Status {
   }
 
   /**
+   * @returns {{status: string, time: string, $context: string}}
+   */
+  toJSON () {
+    return {
+      status: this.status,
+      time: this.time.toUTCString(),
+      $context: this.$context.toString()
+    }
+  }
+
+  /**
    * @param {{status: string, time: Date}} data
    * @returns {Status}
    */
