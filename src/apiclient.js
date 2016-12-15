@@ -163,7 +163,7 @@ export class StaRHsAPIClient {
     return rp(
       {
         method: 'GET',
-        uri: endpoint,
+        uri: endpoint.toString(),
         headers: {
           'SessionToken': sessionToken
         },

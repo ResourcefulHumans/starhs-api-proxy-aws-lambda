@@ -4,7 +4,7 @@ import Promise from 'bluebird'
 import {forIn} from 'lodash'
 import URIValue from 'rheactor-value-objects/uri'
 import {Object as ObjectType} from 'tcomb'
-import {addLink} from '../api'
+import {toLink} from '../api'
 
 /**
  * @param {URIValue} mountURL
@@ -19,7 +19,7 @@ export default function (mountURL, routes) {
         $links: []
       }
       const u = mountURL.slashless().toString()
-      forIn(routes, (v, k) => addLink(index, new URIValue([u, k].join('/')), v))
+      forIn(routes, (v, k) => index.$links.push(toLink(new URIValue([u, k].join('/')), v)))
       return index
     })
   }

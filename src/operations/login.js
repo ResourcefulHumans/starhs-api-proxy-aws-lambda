@@ -6,33 +6,35 @@ const config = require('../config')
 const {key, user, password} = config.get('starhsapi')
 const HttpProblem = require('rheactor-models/http-problem')
 import URIValue from 'rheactor-value-objects/uri'
-import {addLink} from '../api'
+import {toLink} from '../api'
 import {irreducible} from 'tcomb'
-import {StaRHsStatus, Profile} from 'starhs-models'
+import {Model, StaRHsStatus, Profile} from 'starhs-models'
 import JsonWebToken from 'rheactor-models/jsonwebtoken'
+import {merge} from 'lodash'
 const JsonWebTokenType = irreducible('JsonWebTokenType', (x) => x instanceof JsonWebToken)
+const $context = new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#LoginSuccess')
 
-export class LoginSuccess {
+export class LoginSuccess extends Model {
   /**
    * @param {{token: JsonWebToken}} fields
    */
   constructor (fields) {
+    super({$context})
     const {token} = fields
     JsonWebTokenType(token)
     this.token = token
-    this.$context = this.constructor.$context
-    this.$links = []
   }
 
   /**
    * @returns {{token: object, $links: Array<{href: string, $context: string}>, $context: string}}
    */
   toJSON () {
-    return {
-      token: this.token,
-      $links: this.$links,
-      $context: this.$context.toString()
-    }
+    return merge(
+      super.toJSON(),
+      {
+        token: this.token
+      }
+    )
   }
 
   /**
@@ -40,14 +42,14 @@ export class LoginSuccess {
    * @returns {LoginSuccess}
    */
   static fromJSON (data) {
-    return new LoginSuccess({token: new JsonWebToken(data.token)})
+    return new LoginSuccess(merge(super.fromJSON(data), {token: new JsonWebToken(data.token)}))
   }
 
   /**
    * @returns {URIValue}
    */
   static get $context () {
-    return new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#LoginSuccess')
+    return $context
   }
 }
 
@@ -66,7 +68,7 @@ const login = (mountURL, apiClient, body) => {
   })
   const v = Joi.validate(body, schema, {convert: true})
   if (v.error) {
-    throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda/wiki/errors#ValidationFailed', v.error.toString(), 400, v.error)
+    throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed', v.error.toString(), 400, v.error)
   }
 
   return apiClient.loginWithUserId(v.value.username, v.value.password)
@@ -84,8 +86,8 @@ const login = (mountURL, apiClient, body) => {
     )
     .then(token => {
       const result = new LoginSuccess({token: new JsonWebToken(token)})
-      addLink(result, new URIValue([mountURL.toString(), 'profile', v.value.username].join('/')), Profile.$context)
-      addLink(result, new URIValue([mountURL.toString(), 'staRHsStatus', v.value.username].join('/')), StaRHsStatus.$context)
+      result.$links.push(toLink(new URIValue([mountURL.toString(), 'profile', v.value.username].join('/')), Profile.$context))
+      result.$links.push(toLink(new URIValue([mountURL.toString(), 'staRHsStatus', v.value.username].join('/')), StaRHsStatus.$context))
       return result
     })
 }
@@ -97,6 +99,6 @@ const login = (mountURL, apiClient, body) => {
 export function handler (mountURL, apiClient) {
   URIValue.Type(mountURL)
   return {
-    post: login.bind(null, mountURL, apiClient)
+    post: login.bind(null, mountURL.slashless(), apiClient)
   }
 }

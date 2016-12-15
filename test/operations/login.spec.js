@@ -8,14 +8,9 @@ import jwt from 'jsonwebtoken'
 import {handler as loginHandler, LoginSuccess} from '../../src/operations/login'
 import HttpProblem from 'rheactor-models/http-problem'
 import URIValue from 'rheactor-value-objects/uri'
-import {filter, head} from 'lodash/fp'
 import {StaRHsStatus, Profile} from 'starhs-models'
+import {itShouldHaveLinkTo} from './helper'
 const mountURL = new URIValue('https://api.example.com/')
-
-const itShouldHaveLinkTo = (response, model) => {
-  const link = head(filter({$context: model.$context.toString()})(response.$links))
-  expect(link.$context).to.equal(model.$context.toString())
-}
 
 describe('/login', () => {
   it('should return a token', () => {
@@ -65,7 +60,7 @@ describe('/login', () => {
       } catch (err) {
         expect(err).to.be.instanceof(HttpProblem)
         expect(err.status).to.equal(400)
-        expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda/wiki/errors#ValidationFailed')
+        expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed')
         expect(err.title).to.equal(scenarios[i][1])
         expect(err.detail).to.not.equal(undefined)
       }
@@ -78,7 +73,7 @@ describe('/login', () => {
     } catch (err) {
       expect(err).to.be.instanceof(HttpProblem)
       expect(err.status).to.equal(400)
-      expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda/wiki/errors#ValidationFailed')
+      expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed')
       expect(err.title).to.equal('ValidationError: "extra" is not allowed')
       expect(err.detail).to.not.equal(undefined)
     }

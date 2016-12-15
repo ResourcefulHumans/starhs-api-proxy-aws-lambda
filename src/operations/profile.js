@@ -2,21 +2,26 @@
 
 import {JsonWebTokenType} from '../api'
 import {StaRHsAPIClient} from '../apiclient'
-import {Profile} from 'starhs-models'
+import {Profile, StaRH} from 'starhs-models'
 import URIValue from 'rheactor-value-objects/uri'
 import EmailValue from 'rheactor-value-objects/email'
-import {addLink} from '../api'
+import {toLink} from '../api'
 
 /**
+ * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  * @param {object} body
  * @param {object} parts
  * @param {JsonWebToken} token
  * @returns {Promise.<Object>}
  */
-const profile = (apiClient, body, parts, token) => {
+const profile = (mountURL, apiClient, body, parts, token) => {
   StaRHsAPIClient.Type(apiClient)
   JsonWebTokenType(token)
+  const username = parts[0]
+  if (username !== token.sub) {
+    throw new Error(`${username} is not you!`)
+  }
   return apiClient.getProfile(token.payload.SessionToken)
     .then(
       /**
@@ -24,19 +29,26 @@ const profile = (apiClient, body, parts, token) => {
 } response
        */
       response => {
-        return new Profile({
+        const profile = new Profile({
           email: new EmailValue(response.EMail),
           firstname: response.Forename,
           lastname: response.Name,
           avatar: response.URLPicture ? new URIValue(response.URLPicture) : undefined
         })
+        profile.$links.push(toLink(new URIValue([mountURL.toString(), 'staRHs', username, 'shared'].join('/')), StaRH.$context, true, 'received-staRHs'))
+        profile.$links.push(toLink(new URIValue([mountURL.toString(), 'staRHs', username, 'received'].join('/')), StaRH.$context, true, 'shared-staRHs'))
+        return profile
       }
     )
 }
 
 /**
+ * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  */
-export default (apiClient) => ({
-  post: profile.bind(null, apiClient)
-})
+export default (mountURL, apiClient) => {
+  URIValue.Type(mountURL)
+  return {
+    post: profile.bind(null, mountURL.slashless(), apiClient)
+  }
+}

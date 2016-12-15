@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 const JsonWebToken = require('rheactor-models/jsonwebtoken')
 import Promise from 'bluebird'
 const {key, user, password} = config.get('starhsapi')
-import {irreducible} from 'tcomb'
+import {irreducible, maybe, String as StringType, Boolean as BooleanType} from 'tcomb'
 import URIValue from 'rheactor-value-objects/uri'
 
 /**
@@ -59,16 +59,23 @@ export function getOptionalToken (event) {
 export const JsonWebTokenType = irreducible('JsonWebTokenType', (x) => x instanceof JsonWebToken)
 
 /**
- * @param model
- * @param url
- * @param context
+ * @param {URIValue} url
+ * @param {URIValue} context
+ * @param {Boolean} list
+ * @param {String|undefined} rel
+ * @return {{href: string, $context: string, list: boolean|undefined, rel: string|undefined}}
  */
-export const addLink = (model, url, context) => {
+export const toLink = (url, context, list = false, rel) => {
   URIValue.Type(url)
   URIValue.Type(context)
+  BooleanType(list)
+  maybe(StringType)(rel)
   const u = url.toString()
-  model.$links.push({
+  const l = {
     href: u,
     $context: context.toString()
-  })
+  }
+  if (list) l.list = true
+  if (rel) l.rel = rel
+  return l
 }

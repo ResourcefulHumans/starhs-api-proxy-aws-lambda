@@ -14,6 +14,11 @@ import {StaRHsStatus} from 'starhs-models'
 const staRHsStatus = (apiClient, body, parts, token) => {
   StaRHsAPIClient.Type(apiClient)
   JsonWebTokenType(token)
+  JsonWebTokenType(token)
+  const username = parts[0]
+  if (username !== token.sub) {
+    throw new Error(`${username} is not you!`)
+  }
   return apiClient.getStaRHsStatus(token.payload.SessionToken)
     .then(
       /**
