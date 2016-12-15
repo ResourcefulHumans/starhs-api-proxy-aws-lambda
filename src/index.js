@@ -7,11 +7,22 @@ import {StaRHsAPIClient} from './apiclient'
 const config = require('./config')
 const {key, user, password} = config.get('starhsapi')
 const apiClient = new StaRHsAPIClient(key, user, password)
+import indexHandler from './operations/apiindex'
 import loginHandler from './operations/login'
 import staRHsStatusHandler from './operations/starhs-status'
-import statusHandler from './operations/status'
+import {StaRHsStatus, Profile} from 'starhs-models'
+import {handler as statusHandler, Status} from './operations/status'
 import profileHandler from './operations/profile'
+import JsonWebToken from 'rheactor-models/jsonwebtoken'
+import URIValue from 'rheactor-value-objects/uri'
+const mountURL = new URIValue(config.get('mount_url'))
 const operations = {
+  index: indexHandler(mountURL, {
+    'status': Status.$context,
+    'login': new URIValue(JsonWebToken.$context),
+    'profile': Profile.$context,
+    'staRHsStatus': StaRHsStatus.$context
+  }),
   login: loginHandler(apiClient),
   staRHsStatus: staRHsStatusHandler(apiClient),
   profile: profileHandler(apiClient),
@@ -46,7 +57,8 @@ export function handler (event, context, callback) {
       api.checkContentType(event)
       const parts = event.path.split('/')
       parts.shift()
-      const operation = parts.shift()
+      let operation = parts.shift()
+      if (!operation.length) operation = 'index'
       if (!operation.length || !operations[operation]) throw new HttpProblem('Error', `Unknown operation "${event.path}"`, 404)
       const v = Joi.validate(event.httpMethod, Joi.string().lowercase().required().valid(['GET', 'POST']))
       const method = v.value.toLowerCase()

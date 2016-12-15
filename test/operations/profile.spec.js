@@ -8,6 +8,7 @@ import profileHandler from '../../src/operations/profile'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {ProfileType} from 'starhs-models'
+import URIValue from 'rheactor-value-objects/uri'
 
 describe('/profile', () => {
   it('should return the profile', () => {
@@ -70,7 +71,7 @@ describe('/profile', () => {
             expect(profile.lastname).to.equal('Antarctica')
             expect(profile.name).to.equal('Antarctica')
             expect(profile.avatar.toString()).to.equal('http://starhs.net/profileimgs/')
-            expect(profile.$context).to.equal('https://github.com/ResourcefulHumans/staRHs-models#Profile')
+            expect(profile.$context.equals(new URIValue('https://github.com/ResourcefulHumans/staRHs-models#Profile'))).to.equal(true)
           }
         )
       )

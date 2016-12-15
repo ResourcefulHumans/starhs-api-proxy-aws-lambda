@@ -1,12 +1,43 @@
 'use strict'
 
-const Promise = require('bluebird')
+import Promise from 'bluebird'
+import {String as StringType, Date as DateType, irreducible} from 'tcomb'
+import URIValue from 'rheactor-value-objects/uri'
 
-const status = () => Promise.resolve({
-  status: 'ok',
-  time: Date.now()
-})
+export class Status {
+  /**
+   * @param {{status: string, time: Date}} fields
+   */
+  constructor (fields) {
+    const {status, time} = fields
+    StringType(status)
+    DateType(time)
+    this.status = status
+    this.time = time
+    this.$context = this.constructor.$context
+  }
 
-export default {
-  post: status
+  /**
+   * @param {{status: string, time: Date}} data
+   * @returns {Status}
+   */
+  static fromJSON (data) {
+    return new Status(data)
+  }
+
+  /**
+   * @returns {URIValue}
+   */
+  static get $context () {
+    return new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Status')
+  }
+}
+
+export const StatusType = irreducible('StatusType', (x) => x instanceof Status)
+
+export const handler = {
+  post: () => Promise.resolve(new Status({
+    status: 'ok',
+    time: new Date()
+  }))
 }

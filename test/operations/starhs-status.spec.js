@@ -8,6 +8,7 @@ import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {StaRHsStatusType} from 'starhs-models'
 import {generateToken} from './token'
+import URIValue from 'rheactor-value-objects/uri'
 
 describe('/staRHsStatus', () => {
   it('should return status', () => {
@@ -48,7 +49,7 @@ describe('/staRHsStatus', () => {
             expect(status.cycleLeft).to.equal(8)
             expect(status.totalShared).to.equal(19)
             expect(status.totalReceived).to.equal(11)
-            expect(status.$context).to.equal('https://github.com/ResourcefulHumans/staRHs-models#StaRHsStatus')
+            expect(status.$context.equals(new URIValue('https://github.com/ResourcefulHumans/staRHs-models#StaRHsStatus'))).to.equal(true)
           }
         )
       )
