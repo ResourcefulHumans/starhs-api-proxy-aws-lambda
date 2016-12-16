@@ -84,6 +84,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
             } : p
             const $createdAt = new Date(starh.Date)
             return new StaRH({
+              $id: `${username}-${starh.FromID}-${starh.Date}`,
               from,
               to,
               amount,

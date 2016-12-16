@@ -29,6 +29,7 @@ const profile = (mountURL, apiClient, body, parts, token) => {
        */
       response => {
         const profile = new Profile({
+          $id: response.PKUser,
           email: new EmailValue(response.EMail),
           firstname: response.Forename,
           lastname: response.Name,

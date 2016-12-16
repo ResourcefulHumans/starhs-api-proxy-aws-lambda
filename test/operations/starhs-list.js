@@ -47,6 +47,7 @@ describe('/staRHs/{user}/received', () => {
     mockClient.getProfile = (sessionToken) => {
       expect(sessionToken).to.equal('some-session-token')
       return Promise.resolve({
+        'PKUser': 'profile-id-antarctica',
         'Forename': '',
         'Name': 'Antarctica',
         'EMail': 'antartica@example.com',
