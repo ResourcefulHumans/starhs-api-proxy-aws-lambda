@@ -1,14 +1,14 @@
 'use strict'
 
-const config = require('./config')
-export const CONTENT_TYPE = config.get('mime_type') + '; charset=utf-8'
-const _forIn = require('lodash/forIn')
-const jwt = require('jsonwebtoken')
-const JsonWebToken = require('rheactor-models/jsonwebtoken')
+import config from './config'
+import {forIn} from 'lodash'
+import jwt from 'jsonwebtoken'
+import JsonWebToken from 'rheactor-models/jsonwebtoken'
 import Promise from 'bluebird'
+import {irreducible} from 'tcomb'
+
+export const CONTENT_TYPE = config.get('mime_type') + '; charset=utf-8'
 const {key, user, password} = config.get('starhsapi')
-import {irreducible, maybe, String as StringType, Boolean as BooleanType} from 'tcomb'
-import URIValue from 'rheactor-value-objects/uri'
 
 /**
  * @param {Array<String>} headers
@@ -18,7 +18,7 @@ import URIValue from 'rheactor-value-objects/uri'
 export function header (headers, header) {
   if (!headers || headers === null) return false
   const lowerCaseHeaders = {}
-  _forIn(headers, (v, k) => {
+  forIn(headers, (v, k) => {
     lowerCaseHeaders[k.toLowerCase()] = v
   })
   return lowerCaseHeaders[header.toLowerCase()]
@@ -57,25 +57,3 @@ export function getOptionalToken (event) {
 }
 
 export const JsonWebTokenType = irreducible('JsonWebTokenType', (x) => x instanceof JsonWebToken)
-
-/**
- * @param {URIValue} url
- * @param {URIValue} context
- * @param {Boolean} list
- * @param {String|undefined} rel
- * @return {{href: string, $context: string, list: boolean|undefined, rel: string|undefined}}
- */
-export const toLink = (url, context, list = false, rel) => {
-  URIValue.Type(url)
-  URIValue.Type(context)
-  BooleanType(list)
-  maybe(StringType)(rel)
-  const u = url.toString()
-  const l = {
-    href: u,
-    $context: context.toString()
-  }
-  if (list) l.list = true
-  if (rel) l.rel = rel
-  return l
-}

@@ -23,7 +23,7 @@ export class Status {
   toJSON () {
     return {
       status: this.status,
-      time: this.time.toUTCString(),
+      time: this.time.toISOString(),
       $context: this.$context.toString()
     }
   }

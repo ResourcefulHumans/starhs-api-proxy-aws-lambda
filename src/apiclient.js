@@ -6,23 +6,21 @@ import {String as StringType, Date as DateType, Number as NumberType, irreducibl
 import URIValue from 'rheactor-value-objects/uri'
 const PositiveIntegerType = refinement(NumberType, n => n > 0 && n % 1 === 0, 'PositiveIntegerType')
 
-const ENDPOINT = 'https://services.digital-bauhaus.solutions/RH-API/V0.93'
+const ENDPOINT = 'https://services.digital-bauhaus.solutions/RH-API/V0.94'
 
 export class QueryOptions {
   /**
-   * @param {Date} from
-   * @param {Date} to
-   * @param {object} offset
-   * @param {Number} itemsPerPage
+   * @param {{from: Date|undefined, to: Date|undefined, offset: Date|number|undefined, itemsPerPage: number|undefined}} opts
    */
-  constructor (from, to, offset, itemsPerPage = 10) {
+  constructor (opts) {
+    const {from, to, offset, itemsPerPage} = opts
     maybe(DateType)(from)
     maybe(DateType)(to)
     maybe(NumberType)(itemsPerPage)
     this.from = from
     this.to = to
     this.offset = offset
-    this.itemsPerPage = itemsPerPage
+    this.itemsPerPage = itemsPerPage || 10
   }
 }
 

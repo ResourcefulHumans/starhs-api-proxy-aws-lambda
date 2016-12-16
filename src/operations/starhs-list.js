@@ -2,15 +2,14 @@
 
 import {JsonWebTokenType} from '../api'
 import {StaRHsAPIClient, QueryOptions} from '../apiclient'
-import {StaRH} from 'starhs-models'
+import {StaRH, List, Link} from 'starhs-models'
 import URIValue from 'rheactor-value-objects/uri'
-import {toLink} from '../api'
 import Joi from 'joi'
-import List from 'rheactor-web-app/js/model/list'
 import profileHandler from './profile'
 import staRHsStatusHandler from './starhs-status'
 import HttpProblem from 'rheactor-models/http-problem'
 import Promise from 'bluebird'
+import {merge} from 'lodash'
 
 /**
  * @param {URIValue} mountURL
@@ -18,9 +17,10 @@ import Promise from 'bluebird'
  * @param {object} body
  * @param {object} parts
  * @param {JsonWebToken} token
+ * @param {object} qs Query String Parameters
  * @returns {Promise.<Object>}
  */
-const list = (mountURL, apiClient, body, parts, token) => {
+const list = (mountURL, apiClient, body, parts, token, qs) => {
   URIValue.Type(mountURL)
   StaRHsAPIClient.Type(apiClient)
   JsonWebTokenType(token)
@@ -28,12 +28,11 @@ const list = (mountURL, apiClient, body, parts, token) => {
   if (username !== token.sub) {
     throw new Error(`${username} is not you!`)
   }
-  const query = {
-    which: parts[1]
-  }
+  const query = merge({}, qs)
+  query.which = parts[1]
   const schema = Joi.object().keys({
     which: Joi.string().trim().required().allow(['received', 'shared']),
-    offset: Joi.number().min(0)
+    offset: Joi.string()
   })
   const v = Joi.validate(query, schema, {convert: true})
   if (v.error) {
@@ -42,7 +41,7 @@ const list = (mountURL, apiClient, body, parts, token) => {
 
   const received = v.value.which === 'received'
   const m = received ? apiClient.getStaRHsReceived : apiClient.getStaRHsShared
-  const opts = new QueryOptions()
+  const opts = new QueryOptions({offset: v.value.offset ? new Date(v.value.offset) : undefined})
 
   return Promise.join(
     profileHandler(mountURL, apiClient).post({}, [username], token),
@@ -59,13 +58,12 @@ const list = (mountURL, apiClient, body, parts, token) => {
         const p = {name: profile.name, avatar: profile.avatar}
         const total = received ? status.totalReceived : status.totalShared
         const links = []
-        // FIXME: there may be invalid dates: "2016-12-7T19:50:00"
         let nextOffset
         if (staRHs.length) {
-          nextOffset = (new Date(staRHs[staRHs.length - 1].Date).getTime()) + 1
+          nextOffset = (new Date(new Date(staRHs[staRHs.length - 1].Date).getTime() + 1)).toISOString()
           links.push(
-            toLink(
-              new URIValue([mountURL.toString(), 'staRHs', username, v.value.which].join('/') + '?offset=' + nextOffset),
+            new Link(
+              new URIValue([mountURL.toString(), 'staRHs', username, v.value.which].join('/') + '?offset=' + encodeURIComponent(nextOffset)),
               StaRH.$context,
               true,
               'next'
@@ -73,12 +71,17 @@ const list = (mountURL, apiClient, body, parts, token) => {
           )
         }
         return new List(
-          StaRH.$context.toString(),
           staRHs.map(starh => {
             const amount = starh.No
             const message = starh.Reason
-            const to = received ? p : {name: starh.To, avatar: starh.ToURLPicture ? new URIValue(starh.ToURLPicture) : undefined}
-            const from = received ? {name: starh.From, avatar: starh.FromURLPicture ? new URIValue(starh.FromURLPicture) : undefined} : p
+            const to = received ? p : {
+              name: starh.To,
+              avatar: starh.ToURLPicture ? new URIValue(starh.ToURLPicture) : undefined
+            }
+            const from = received ? {
+              name: starh.From,
+              avatar: starh.FromURLPicture ? new URIValue(starh.FromURLPicture) : undefined
+            } : p
             const $createdAt = new Date(starh.Date)
             return new StaRH({
               from,
@@ -89,7 +92,6 @@ const list = (mountURL, apiClient, body, parts, token) => {
             })
           }),
           total,
-          v.value.offset ? new Date(v.value.offset) : undefined,
           opts.itemsPerPage,
           links
         )

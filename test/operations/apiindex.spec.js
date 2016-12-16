@@ -9,13 +9,13 @@ import URIValue from 'rheactor-value-objects/uri'
 
 describe('apiindex', () => {
   it('should create a list of links', () => {
-    handler(new URIValue('https://api.example.com/'), {
+    return handler(new URIValue('https://api.example.com/'), {
       'status': Status.$context
     }).get()
       .then(response => {
         expect(response.$links.length).to.equal(1)
-        expect(response.$links[0].href).to.equal('https://api.example.com/status')
-        expect(response.$links[0].$context).to.equal(Status.$context.toString())
+        expect(response.$links[0].href.equals(new URIValue('https://api.example.com/status'))).to.equal(true)
+        expect(response.$links[0].subject.equals(Status.$context)).to.equal(true)
       })
   })
 })

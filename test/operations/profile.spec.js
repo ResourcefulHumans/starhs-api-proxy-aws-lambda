@@ -8,7 +8,7 @@ import profileHandler from '../../src/operations/profile'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import URIValue from 'rheactor-value-objects/uri'
-import {Profile, StaRH, ProfileType} from 'starhs-models'
+import {StaRH, ProfileType} from 'starhs-models'
 import {itShouldHaveLinkTo} from './helper'
 const mountURL = new URIValue('https://api.example.com/')
 
@@ -28,7 +28,7 @@ describe('/profile', () => {
         'Name': 'Antarctica',
         'Function': null,
         'Telephone': '',
-        'EMail': 'markus+antartica@rhway.net',
+        'EMail': 'antartica@example.com',
         'MobilePhone': '',
         'Profile': '',
         'UserID': 'antarctica',
@@ -68,7 +68,7 @@ describe('/profile', () => {
            */
           profile => {
             ProfileType(profile)
-            expect(profile.email.toString()).to.equal('markus+antartica@rhway.net')
+            expect(profile.email.toString()).to.equal('antartica@example.com')
             expect(profile.firstname).to.equal('')
             expect(profile.lastname).to.equal('Antarctica')
             expect(profile.name).to.equal('Antarctica')

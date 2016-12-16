@@ -30,7 +30,7 @@ const operations = {
 const HttpProblem = require('rheactor-models/http-problem')
 
 /**
- * @param {{headers: {Object}, path: {String}, httpMethod: {String}, body: {String}}} event
+ * @param {{headers: object, path: string, httpMethod: string, body: string, queryStringParameters: object}} event
  * @param {object} context
  * @param {function} callback
  */
@@ -66,7 +66,7 @@ export function handler (event, context, callback) {
       }
       const body = event.body ? JSON.parse(event.body) : {}
       return api.getOptionalToken(event)
-        .then(token => operations[operation][method](body, parts, token))
+        .then(token => operations[operation][method](body, parts, token, event.queryStringParameters))
     })
     .then(res => done(null, res))
     .catch(err => done(err))

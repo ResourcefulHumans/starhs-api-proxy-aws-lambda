@@ -1,16 +1,15 @@
 'use strict'
 
-const Joi = require('joi')
-const jwt = require('jsonwebtoken')
-const config = require('../config')
-const {key, user, password} = config.get('starhsapi')
-const HttpProblem = require('rheactor-models/http-problem')
+import Joi from 'joi'
+import jwt from 'jsonwebtoken'
+import config from '../config'
+import HttpProblem from 'rheactor-models/http-problem'
 import URIValue from 'rheactor-value-objects/uri'
-import {toLink} from '../api'
 import {irreducible} from 'tcomb'
-import {Model, StaRHsStatus, Profile} from 'starhs-models'
+import {Link, Model, StaRHsStatus, Profile} from 'starhs-models'
 import JsonWebToken from 'rheactor-models/jsonwebtoken'
 import {merge} from 'lodash'
+const {key, user, password} = config.get('starhsapi')
 const JsonWebTokenType = irreducible('JsonWebTokenType', (x) => x instanceof JsonWebToken)
 const $context = new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#LoginSuccess')
 
@@ -86,8 +85,8 @@ const login = (mountURL, apiClient, body) => {
     )
     .then(token => {
       const result = new LoginSuccess({token: new JsonWebToken(token)})
-      result.$links.push(toLink(new URIValue([mountURL.toString(), 'profile', v.value.username].join('/')), Profile.$context))
-      result.$links.push(toLink(new URIValue([mountURL.toString(), 'staRHsStatus', v.value.username].join('/')), StaRHsStatus.$context))
+      result.$links.push(new Link(new URIValue([mountURL.toString(), 'profile', v.value.username].join('/')), Profile.$context))
+      result.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHsStatus', v.value.username].join('/')), StaRHsStatus.$context))
       return result
     })
 }
