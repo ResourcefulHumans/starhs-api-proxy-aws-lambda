@@ -40,7 +40,7 @@
     "rheactor-models": "^1.1.1",
     "rheactor-value-objects": "^3.4.0",
     "rheactor-web-app": "^2.11.0",
-    "starhs-models": "^4.4.1",
+    "starhs-models": "^5.0.0",
     "tcomb": "^3.2.15"
   },
   "devDependencies": {
