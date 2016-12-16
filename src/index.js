@@ -13,6 +13,7 @@ import staRHsStatusHandler from './operations/starhs-status'
 import {handler as statusHandler, Status} from './operations/status'
 import profileHandler from './operations/profile'
 import staRHsListHandler from './operations/starhs-list'
+import colleaguesListHandler from './operations/colleagues-list'
 import JsonWebToken from 'rheactor-models/jsonwebtoken'
 import URIValue from 'rheactor-value-objects/uri'
 const mountURL = new URIValue(config.get('mount_url'))
@@ -25,6 +26,7 @@ const operations = {
   staRHsStatus: staRHsStatusHandler(apiClient),
   staRHs: staRHsListHandler(mountURL, apiClient),
   profile: profileHandler(mountURL, apiClient),
+  colleagues: colleaguesListHandler(mountURL, apiClient),
   status: statusHandler
 }
 const HttpProblem = require('rheactor-models/http-problem')

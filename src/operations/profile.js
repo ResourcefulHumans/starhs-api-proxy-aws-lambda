@@ -5,6 +5,7 @@ import {StaRHsAPIClient} from '../apiclient'
 import {Profile, StaRH, Link} from 'starhs-models'
 import URIValue from 'rheactor-value-objects/uri'
 import EmailValue from 'rheactor-value-objects/email'
+import {trim} from 'lodash'
 
 /**
  * @param {URIValue} mountURL
@@ -30,13 +31,14 @@ const profile = (mountURL, apiClient, body, parts, token) => {
       response => {
         const profile = new Profile({
           $id: response.PKUser,
-          email: new EmailValue(response.EMail),
+          email: new EmailValue(trim(response.EMail)),
           firstname: response.Forename,
           lastname: response.Name,
           avatar: response.URLPicture ? new URIValue(response.URLPicture) : undefined
         })
         profile.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'shared'].join('/')), StaRH.$context, true, 'shared-staRHs'))
         profile.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'received'].join('/')), StaRH.$context, true, 'received-staRHs'))
+        profile.$links.push(new Link(new URIValue([mountURL.toString(), 'colleagues', username].join('/')), Profile.$context, true, 'colleagues'))
         return profile
       }
     )
