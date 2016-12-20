@@ -9,8 +9,8 @@ import {irreducible} from 'tcomb'
 import {Link, Model, StaRHsStatus, Profile} from 'starhs-models'
 import JsonWebToken from 'rheactor-models/jsonwebtoken'
 import {merge} from 'lodash'
+import {JsonWebTokenType} from '../api'
 const {key, user, password} = config.get('starhsapi')
-const JsonWebTokenType = irreducible('JsonWebTokenType', (x) => x instanceof JsonWebToken)
 const $context = new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#LoginSuccess')
 
 export class LoginSuccess extends Model {
@@ -61,6 +61,7 @@ export const LoginSuccessType = irreducible('LoginSuccessType', (x) => x instanc
  * @returns {Promise.<LoginSuccess>}
  */
 const login = (mountURL, apiClient, body) => {
+  URIValue.Type(mountURL)
   const schema = Joi.object().keys({
     username: Joi.string().trim().required(),
     password: Joi.string().required().trim()
