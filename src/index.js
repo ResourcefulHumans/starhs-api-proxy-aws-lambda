@@ -14,6 +14,7 @@ import {handler as statusHandler, Status} from './operations/status'
 import profileHandler from './operations/profile'
 import staRHsListHandler from './operations/starhs-list'
 import colleaguesListHandler from './operations/colleagues-list'
+import shareHandler from './operations/share'
 import JsonWebToken from 'rheactor-models/jsonwebtoken'
 import URIValue from 'rheactor-value-objects/uri'
 const mountURL = new URIValue(config.get('mount_url'))
@@ -25,6 +26,7 @@ const operations = {
   login: loginHandler(mountURL, apiClient),
   staRHsStatus: staRHsStatusHandler(apiClient),
   staRHs: staRHsListHandler(mountURL, apiClient),
+  share: shareHandler(mountURL, apiClient),
   profile: profileHandler(mountURL, apiClient),
   colleagues: colleaguesListHandler(mountURL, apiClient),
   status: statusHandler

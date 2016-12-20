@@ -225,6 +225,10 @@ export class StaRHsAPIClient {
         qs,
         json: true
       })
+      .then(() => {
+        // response = '{ "Message": "StaRHs have been shared" }'
+        return true
+      })
   }
 
   /**

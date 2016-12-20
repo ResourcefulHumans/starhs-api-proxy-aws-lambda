@@ -39,6 +39,7 @@ const profile = (mountURL, apiClient, body, parts, token) => {
         profile.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'shared'].join('/')), StaRH.$context, true, 'shared-staRHs'))
         profile.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'received'].join('/')), StaRH.$context, true, 'received-staRHs'))
         profile.$links.push(new Link(new URIValue([mountURL.toString(), 'colleagues', username].join('/')), Profile.$context, true, 'colleagues'))
+        profile.$links.push(new Link(new URIValue([mountURL.toString(), 'share'].join('/')), StaRH.$context, false, 'share-staRH'))
         return profile
       }
     )
