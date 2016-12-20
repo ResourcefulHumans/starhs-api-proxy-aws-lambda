@@ -10,13 +10,15 @@ const apiClient = new StaRHsAPIClient(key, user, password)
 import indexHandler from './operations/apiindex'
 import {handler as loginHandler} from './operations/login'
 import staRHsStatusHandler from './operations/starhs-status'
-import {handler as statusHandler, Status} from './operations/status'
+import {handler as statusHandler} from './operations/status'
 import profileHandler from './operations/profile'
 import staRHsListHandler from './operations/starhs-list'
 import colleaguesListHandler from './operations/colleagues-list'
 import shareHandler from './operations/share'
 import JsonWebToken from 'rheactor-models/jsonwebtoken'
 import URIValue from 'rheactor-value-objects/uri'
+import {Status} from 'starhs-models'
+
 const mountURL = new URIValue(config.get('mount_url'))
 const operations = {
   index: indexHandler(mountURL, {

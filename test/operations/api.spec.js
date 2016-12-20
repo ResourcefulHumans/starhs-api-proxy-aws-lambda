@@ -7,7 +7,7 @@ const index = require('../../src/index')
 const api = require('../../src/api')
 const headers = {'Content-type': api.CONTENT_TYPE}
 import {filter, head} from 'lodash/fp'
-import {Status} from '../../src/operations/status'
+import {Status} from 'starhs-models'
 import Promise from 'bluebird'
 
 describe('API', () => {

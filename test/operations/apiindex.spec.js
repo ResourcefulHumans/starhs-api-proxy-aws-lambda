@@ -4,7 +4,7 @@
 
 import {expect} from 'chai'
 import handler from '../../src/operations/apiindex'
-import {Status} from '../../src/operations/status'
+import {Status} from 'starhs-models'
 import URIValue from 'rheactor-value-objects/uri'
 
 describe('apiindex', () => {
