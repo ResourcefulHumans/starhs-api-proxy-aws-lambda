@@ -1,12 +1,10 @@
 'use strict'
 
-const Promise = require('bluebird')
-const api = require('./api')
-const Joi = require('joi')
+import Promise from 'bluebird'
+import {CONTENT_TYPE, checkContentType, getOptionalToken} from './api'
+import Joi from 'joi'
 import {StaRHsAPIClient} from './apiclient'
-const config = require('./config')
-const {key, user, password} = config.get('starhsapi')
-const apiClient = new StaRHsAPIClient(key, user, password)
+import config from './config'
 import indexHandler from './operations/apiindex'
 import {handler as loginHandler} from './operations/login'
 import staRHsStatusHandler from './operations/starhs-status'
@@ -19,6 +17,8 @@ import JsonWebToken from 'rheactor-models/jsonwebtoken'
 import URIValue from 'rheactor-value-objects/uri'
 import {Status} from 'starhs-models'
 
+const {key, user, password} = config.get('starhsapi')
+const apiClient = new StaRHsAPIClient(key, user, password)
 const mountURL = new URIValue(config.get('mount_url'))
 const operations = {
   index: indexHandler(mountURL, {
@@ -52,14 +52,14 @@ export function handler (event, context, callback) {
       statusCode: err ? err.status : (res ? statusCode : 204),
       body: JSON.stringify(err || res),
       headers: {
-        'Content-Type': api.CONTENT_TYPE
+        'Content-Type': CONTENT_TYPE
       }
     })
   }
 
   Promise
     .try(() => {
-      api.checkContentType(event)
+      checkContentType(event)
       const parts = event.path.split('/')
       parts.shift()
       let operation = parts.shift()
@@ -70,7 +70,7 @@ export function handler (event, context, callback) {
         throw new HttpProblem('Error', `Unsupported action "${event.httpMethod} ${event.path}"`, 400)
       }
       const body = event.body ? JSON.parse(event.body) : {}
-      return api.getOptionalToken(event)
+      return getOptionalToken(event)
         .then(token => operations[operation][method](body, parts, token, event.queryStringParameters))
     })
     .then(res => done(null, res))

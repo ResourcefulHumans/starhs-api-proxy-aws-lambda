@@ -2,13 +2,13 @@
 
 /* global describe, it */
 
-const expect = require('chai').expect
-const index = require('../../src/index')
-const api = require('../../src/api')
-const headers = {'Content-type': api.CONTENT_TYPE}
+import {expect} from 'chai'
+import {handler} from '../../src/index'
+import {CONTENT_TYPE} from '../../src/api'
 import {filter, head} from 'lodash/fp'
 import {Status} from 'starhs-models'
 import Promise from 'bluebird'
+const headers = {'Content-type': CONTENT_TYPE}
 
 describe('API', () => {
   describe('/index', () => {
@@ -17,20 +17,19 @@ describe('API', () => {
       const httpMethod = 'GET'
       return new Promise(
         (resolve, reject) => {
-          index
-            .handler({
-              headers,
-              httpMethod,
-              path
-            }, null, (err, res) => {
-              if (err) return reject(err)
-              return resolve(res)
-            })
+          handler({
+            headers,
+            httpMethod,
+            path
+          }, null, (err, res) => {
+            if (err) return reject(err)
+            return resolve(res)
+          })
         })
         .then(res => {
           expect(res.statusCode).to.equal(200)
           expect(res.headers).to.deep.equal({
-            'Content-Type': api.CONTENT_TYPE
+            'Content-Type': CONTENT_TYPE
           })
           const body = JSON.parse(res.body)
           expect(body.$links.length).to.be.at.least(2)
@@ -45,7 +44,7 @@ describe('API', () => {
       const httpMethod = 'POST'
       return new Promise(
         (resolve, reject) => {
-          index.handler({
+          handler({
             headers,
             httpMethod,
             path
@@ -57,7 +56,7 @@ describe('API', () => {
         .then(res => {
           expect(res.statusCode).to.equal(200)
           expect(res.headers).to.deep.equal({
-            'Content-Type': api.CONTENT_TYPE
+            'Content-Type': CONTENT_TYPE
           })
           const body = JSON.parse(res.body)
           expect(body.status).to.equal('ok')
