@@ -4,94 +4,92 @@
 
 import {expect} from 'chai'
 import {generateToken} from './token'
-import staRHsListHandler from '../../src/operations/starhs-list'
+import colleaguesListHandler from '../../src/operations/colleagues-list'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import URIValue from 'rheactor-value-objects/uri'
-import {ListType, StaRH} from 'starhs-models'
-import {itShouldHaveLinkTo} from './helper'
+import EmailValue from 'rheactor-value-objects/email'
+import {ListType, Profile} from 'starhs-models'
 const mountURL = new URIValue('https://api.example.com/')
 
-describe('/staRHs/{user}/received', () => {
-  it('should return the received staRHs', () => {
+describe('/colleagues/{user}', () => {
+  it('should return the colleagues of the user', () => {
     const mockClient = new StaRHsAPIClient('myapikey', 'apiuser', 'apipass')
-    mockClient.getStaRHsReceived = (sessionToken, opts) => {
+    mockClient.getClientEmployees = (sessionToken, opts) => {
       expect(sessionToken).to.equal('some-session-token')
       return Promise.resolve([
         {
-          'From': 'Peter Gamelkoorn',
-          'FromID': '1a1d56af-a34e-47e9-b590-309da51f60cc',
-          'FromURLPicture': 'https://starhs.net/profileimgs/20c67c72-7c45-4de0-91e3-c2ac11c40b95.jpg',
-          'No': 2,
-          'Reason': 'staRH message 1',
-          'Date': '2016-12-13T15:16:00'
+          'PKUser': '9d1ecf8d-996e-4e5a-99e7-1a751157903a',
+          'MapID': 11929,
+          'Salutation': '',
+          'Title': '',
+          'Forename': '',
+          'Name': 'Antarctica',
+          'Function': null,
+          'Telephone': '',
+          'EMail': 'antarctica@example.com',
+          'MobilePhone': '',
+          'Profile': '',
+          'UserID': 'antarctica',
+          'InformByMail': true,
+          'URLPicture': 'https://starhs.net/profileimgs/'
         },
         {
-          'From': 'Angela Maus',
-          'FromID': '1d70ff1a-d5c9-4edf-b383-35a0074462c3',
-          'FromURLPicture': 'https://starhs.net/profileimgs/05a08e72-eaa0-4ab3-8b52-61ca02860f2d.jpg',
-          'No': 2,
-          'Reason': 'staRH message 2',
-          'Date': '2016-12-12T23:50:00'
+          'PKUser': 'd0d93732-9de8-49d0-a20b-c139851c1eb8',
+          'MapID': 3493,
+          'Salutation': '',
+          'Title': '',
+          'Forename': 'Kathrin',
+          'Name': 'B',
+          'Function': null,
+          'Telephone': '',
+          'EMail': 'kathrin@example.com',
+          'MobilePhone': '',
+          'Profile': '',
+          'UserID': 'Kathrin',
+          'InformByMail': true,
+          'URLPicture': 'https://starhs.net/profileimgs/f_Platzhalter-M.jpg'
         },
         {
-          'From': 'Heiko Fischer',
-          'FromID': '1b71e7a5-122b-489a-9def-e43cfba32adf',
-          'FromURLPicture': 'https://starhs.net/profileimgs/8651161a-ac33-4837-9c33-87997ce7bdc1.jpg',
-          'No': 2,
-          'Reason': 'staRH message 3',
-          'Date': '2016-12-12T19:57:00'
+          'PKUser': 'f7877bd9-836c-4ded-b10e-152dda2f6e78',
+          'MapID': 1685,
+          'Salutation': '',
+          'Title': '',
+          'Forename': 'Alexander',
+          'Name': 'B',
+          'Function': null,
+          'Telephone': '',
+          'EMail': 'alexander@example.com',
+          'MobilePhone': '',
+          'Profile': '',
+          'UserID': 'Beitzi',
+          'InformByMail': true,
+          'URLPicture': 'https://starhs.net/profileimgs/f_Platzhalter-M.jpg'
         }
       ])
     }
-    mockClient.getProfile = (sessionToken) => {
-      expect(sessionToken).to.equal('some-session-token')
-      return Promise.resolve({
-        'PKUser': 'profile-id-antarctica',
-        'Forename': '',
-        'Name': 'Antarctica',
-        'EMail': 'antartica@example.com',
-        'URLPicture': 'http://starhs.net/profileimgs/'
-      })
-    }
-    mockClient.getStaRHsStatus = (sessionToken) => {
-      expect(sessionToken).to.equal('some-session-token')
-      return Promise.resolve({
-        'CycleStaRHsToShare': 10,
-        'YouHaveShared': 1,
-        'YouHaveReceived': 2,
-        'YouHaveLeft': 8,
-        'TotalShared': 19,
-        'TotalReceived': 11
-      })
-    }
-    const list = staRHsListHandler(mountURL, mockClient)
+    const list = colleaguesListHandler(mountURL, mockClient)
     return generateToken()
-      .then(token => list.post({}, ['some-user-name', 'received'], token)
+      .then(token => list.post({}, ['some-user-name'], token)
         .then(
           /**
            * @param {List} list
            */
           list => {
             ListType(list)
-            itShouldHaveLinkTo(list, StaRH, true, 'next')
-            expect(list.total).to.equal(11)
-            expect(list.itemsPerPage).to.equal(10)
-            expect(list.hasNext).to.equal(true)
+            expect(list.total).to.equal(Number.MAX_SAFE_INTEGER)
+            expect(list.itemsPerPage).to.equal(Number.MAX_SAFE_INTEGER)
+            expect(list.hasNext).to.equal(false)
             expect(list.hasPrev).to.equal(false)
             expect(list.items.length).to.equal(3)
-            expect(list.items[0]).to.be.instanceof(StaRH)
-            expect(list.items[0].amount).to.equal(2)
-            expect(list.items[0].message).to.equal('staRH message 1')
-            expect(list.items[0].$createdAt.toISOString()).to.equal(new Date('2016-12-13T15:16:00').toISOString())
-            expect(list.items[0].to).to.deep.equal({
-              name: 'Antarctica',
-              avatar: new URIValue('http://starhs.net/profileimgs/')
-            })
-            expect(list.items[0].from).to.deep.equal({
-              name: 'Peter Gamelkoorn',
-              avatar: new URIValue('https://starhs.net/profileimgs/20c67c72-7c45-4de0-91e3-c2ac11c40b95.jpg')
-            })
+            expect(list.items[0]).to.be.instanceof(Profile)
+            expect(list.items[0].$id).to.equal('9d1ecf8d-996e-4e5a-99e7-1a751157903a')
+            expect(list.items[0].email.equals(new EmailValue('antarctica@example.com'))).to.equal(true)
+            expect(list.items[0].firstname).to.equal('')
+            expect(list.items[0].lastname).to.equal('Antarctica')
+            expect(list.items[0].avatar.equals(new URIValue('https://starhs.net/profileimgs/'))).to.equal(true)
+            expect(list.items[1].firstname).to.equal('Kathrin')
+            expect(list.items[1].lastname).to.equal('B')
           }
         )
       )
