@@ -61,7 +61,6 @@ export function handler (event, context, callback) {
       const parts = event.path.split('/')
       parts.shift()
       let operation = parts.shift()
-      if (!operation.length) operation = 'index'
       if (!operation.length || !operations[operation]) throw new HttpProblem('Error', `Unknown operation "${event.path}"`, 404)
       const v = Joi.validate(event.httpMethod, Joi.string().lowercase().required().valid(['GET', 'POST']))
       const method = v.value.toLowerCase()

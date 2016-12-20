@@ -11,9 +11,9 @@ import {Status} from '../../src/operations/status'
 import Promise from 'bluebird'
 
 describe('API', () => {
-  describe('/', () => {
+  describe('/index', () => {
     it('should return the API index', () => {
-      const path = '/'
+      const path = '/index'
       const httpMethod = 'GET'
       return new Promise(
         (resolve, reject) => {
