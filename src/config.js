@@ -10,7 +10,9 @@ nconf
       'starhsapi__key',
       'starhsapi__user',
       'starhsapi__password',
-      'mount_url'
+      'mount_url',
+      'version',
+      'deploy_time'
     ],
     lowerCase: true,
     separator: '__'
@@ -24,7 +26,9 @@ nconf.defaults({
     'key': 'myapikey',
     'user': 'apiuser',
     'password': 'apipass'
-  }
+  },
+  'version': '0.0.0-development',
+  'deploy_time': Date.now()
 })
 
 module.exports = nconf

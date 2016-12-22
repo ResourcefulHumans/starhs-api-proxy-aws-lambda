@@ -56,10 +56,12 @@ describe('API', () => {
         .then(res => {
           expect(res.statusCode).to.equal(200)
           expect(res.headers).to.deep.equal({
-            'Content-Type': CONTENT_TYPE
+            'Content-Type': CONTENT_TYPE,
+            'Access-Control-Allow-Origin': '*'
           })
           const body = JSON.parse(res.body)
           expect(body.status).to.equal('ok')
+          expect(body.version).to.match(/^0\.0\.0\+testing\.[0-9]+/)
           expect(new Date(body.time).getTime()).to.be.most(Date.now())
         })
     })

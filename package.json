@@ -3,9 +3,9 @@
   "description": "A proxy for the staRHs API running on AWS lambda",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=testing mocha --compilers js:babel-register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js",
+    "test": "NODE_ENV=testing VERSION=0.0.0 mocha --compilers js:babel-register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js",
     "test:coverage": "NODE_ENV=testing istanbul cover _mocha -- --compilers js:babel-core/register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js",
-    "test:coverage-travis": "NODE_ENV=testing istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js && cat ./coverage/lcov.info | codacy-coverage",
+    "test:coverage-travis": "NODE_ENV=testing VERSION=0.0.0 istanbul cover _mocha --report lcovonly -- --compilers js:babel-register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js && cat ./coverage/lcov.info | codacy-coverage",
     "lint": "standard",
     "precommit": "npm run lint && npm test",
     "commitmsg": "validate-commit-msg",
@@ -40,7 +40,7 @@
     "rheactor-models": "^1.1.1",
     "rheactor-value-objects": "^3.4.0",
     "rheactor-web-app": "^2.11.0",
-    "starhs-models": "^5.1.0",
+    "starhs-models": "^5.1.1",
     "tcomb": "^3.2.15"
   },
   "devDependencies": {

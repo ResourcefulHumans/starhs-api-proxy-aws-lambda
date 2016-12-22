@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help deploy update delete clean
+.PHONY: help deploy update update-lambda-function update-lambda-env update-env-vars delete clean
 
 AWS__REGION ?= "eu-central-1"
 AWS__FUNCTION_NAME ?= "staRHsAPIproxy"
@@ -20,21 +20,31 @@ deploy: archive.zip ## Deploy to AWS lambda
 	--role $(AWS__ROLE) \
 	--timeout 60 \
 	--handler index.handler \
-	--environment "Variables={STARHSAPI__KEY=$(STARHSAPI__KEY),STARHSAPI__USER=$(STARHSAPI__USER),STARHSAPI__PASSWORD=$(STARHSAPI__PASSWORD)}" \
 	--runtime nodejs4.3
 
-update: archive.zip ## Update the lambda function with new build
+update: ## Update the lambda function with new build
+	make update-lambda-function
+	make -s update-lambda-env
+
+update-lambda-function: archive.zip # update the lambda function code
 	aws lambda update-function-code \
 	--region $(AWS__REGION) \
 	--function-name $(AWS__FUNCTION_NAME) \
 	--zip-file fileb://$<
 
-update-environment: guard-STARHSAPI__KEY guard-STARHSAPI__USER guard-STARHSAPI__PASSWORD ## update the environment variables
+update-lambda-env: # Update the lambda environment with version from environment variable and current time for deploy time
 	aws lambda update-function-configuration \
-  --function-name $(AWS__FUNCTION_NAME) \
-  --environment "Variables={STARHSAPI__KEY=$(STARHSAPI__KEY),STARHSAPI__USER=$(STARHSAPI__USER),STARHSAPI__PASSWORD=$(STARHSAPI__PASSWORD)}" \
+	--function-name $(AWS__FUNCTION_NAME) \
 	--region $(AWS__REGION) \
-  --profile default
+	--profile default \
+	--environment "Variables={$(shell make -s update-env-vars)}"
+
+update-env-vars: # Add version and deploy time to lambda environment variables string
+	aws lambda get-function-configuration \
+  --function-name $(AWS__FUNCTION_NAME) \
+	--region $(AWS__REGION) \
+  --profile default \
+  | ./node_modules/.bin/babel-node ./util/update-lambda-environment-config.js
 
 delete: ## Deploy from AWS lambda
 	aws lambda delete-function --region $(AWS__REGION) --function-name $(AWS__FUNCTION_NAME)
