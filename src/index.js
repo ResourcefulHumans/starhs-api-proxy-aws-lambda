@@ -52,7 +52,8 @@ export function handler (event, context, callback) {
       statusCode: err ? err.status : (res ? statusCode : 204),
       body: JSON.stringify(err || res),
       headers: {
-        'Content-Type': CONTENT_TYPE
+        'Content-Type': CONTENT_TYPE,
+        'Access-Control-Allow-Origin': '*'
       }
     })
   }

@@ -29,7 +29,8 @@ describe('API', () => {
         .then(res => {
           expect(res.statusCode).to.equal(200)
           expect(res.headers).to.deep.equal({
-            'Content-Type': CONTENT_TYPE
+            'Content-Type': CONTENT_TYPE,
+            'Access-Control-Allow-Origin': '*'
           })
           const body = JSON.parse(res.body)
           expect(body.$links.length).to.be.at.least(2)

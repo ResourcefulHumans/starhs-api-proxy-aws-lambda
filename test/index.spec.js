@@ -18,7 +18,8 @@ describe('index', () => {
       expect(err).to.equal(null)
       expect(res.statusCode).to.equal(404)
       expect(res.headers).to.deep.equal({
-        'Content-Type': api.CONTENT_TYPE
+        'Content-Type': api.CONTENT_TYPE,
+        'Access-Control-Allow-Origin': '*'
       })
       const expectedProblem = new HttpProblem('Error', 'Unknown operation "/some/operation"', 404)
       const body = JSON.parse(res.body)
@@ -43,7 +44,8 @@ describe('index', () => {
       expect(err).to.equal(null)
       expect(res.statusCode).to.equal(400)
       expect(res.headers).to.deep.equal({
-        'Content-Type': api.CONTENT_TYPE
+        'Content-Type': api.CONTENT_TYPE,
+        'Access-Control-Allow-Origin': '*'
       })
       const expectedProblem = new HttpProblem('Error', 'Unsupported action "DELETE /status"', 400)
       const body = JSON.parse(res.body)
@@ -68,7 +70,8 @@ describe('index', () => {
       expect(err).to.equal(null)
       expect(res.statusCode).to.equal(400)
       expect(res.headers).to.deep.equal({
-        'Content-Type': api.CONTENT_TYPE
+        'Content-Type': api.CONTENT_TYPE,
+        'Access-Control-Allow-Origin': '*'
       })
       const expectedProblem = new HttpProblem('Error', 'Unexpected token b in JSON at position 1', 400)
       const body = JSON.parse(res.body)
