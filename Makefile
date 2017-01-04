@@ -22,11 +22,7 @@ deploy: archive.zip ## Deploy to AWS lambda
 	--handler index.handler \
 	--runtime nodejs4.3
 
-update: ## Update the lambda function with new build
-	make update-lambda-function
-	make -s update-lambda-env
-
-update-lambda-function: archive.zip # update the lambda function code
+update-lambda-function: archive.zip ## Update the lambda function with new build
 	aws lambda update-function-code \
 	--region $(AWS__REGION) \
 	--function-name $(AWS__FUNCTION_NAME) \
@@ -39,7 +35,7 @@ update-lambda-env: # Update the lambda environment with version from environment
 	--profile default \
 	--environment "Variables={$(shell make -s update-env-vars)}"
 
-update-env-vars: # Add version and deploy time to lambda environment variables string
+update-env-vars: guard-NODE_ENV guard-VERSION ## Add version and deploy time to lambda environment variables string
 	aws lambda get-function-configuration \
   --function-name $(AWS__FUNCTION_NAME) \
 	--region $(AWS__REGION) \
