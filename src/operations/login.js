@@ -10,6 +10,7 @@ import {Link, Model, StaRHsStatus, Profile} from 'starhs-models'
 import JsonWebToken from 'rheactor-models/jsonwebtoken'
 import {merge} from 'lodash'
 import {JsonWebTokenType} from '../api'
+import {StatusCodeError} from 'request-promise/errors'
 const {key, user, password} = config.get('starhsapi')
 const $context = new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#LoginSuccess')
 
@@ -89,6 +90,13 @@ const login = (mountURL, apiClient, body) => {
       result.$links.push(new Link(new URIValue([mountURL.toString(), 'profile', v.value.username].join('/')), Profile.$context))
       result.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHsStatus', v.value.username].join('/')), StaRHsStatus.$context))
       return result
+    })
+    .catch(StatusCodeError, reason => {
+      if (reason.statusCode === 500 && reason.error.ExceptionMessage.match(/Login credentials wrong/)) {
+        throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Forbidden', reason.error.ExceptionMessage, 403, reason.error)
+      } else {
+        throw reason
+      }
     })
 }
 
