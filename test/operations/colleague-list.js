@@ -1,5 +1,3 @@
-'use strict'
-
 /* global describe, it */
 
 import {expect} from 'chai'
@@ -7,9 +5,9 @@ import {generateToken} from './token'
 import colleaguesListHandler from '../../src/operations/colleagues-list'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
-import URIValue from 'rheactor-value-objects/uri'
-import EmailValue from 'rheactor-value-objects/email'
-import {ListType, Profile} from 'starhs-models'
+import {URIValue, EmailValue} from 'rheactor-value-objects'
+import {Profile} from 'starhs-models'
+import {ListType} from 'rheactor-models'
 const mountURL = new URIValue('https://api.example.com/')
 
 describe('/colleagues/{user}', () => {

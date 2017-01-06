@@ -1,5 +1,3 @@
-'use strict'
-
 /* global process */
 
 import {merge, forIn} from 'lodash'

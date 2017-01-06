@@ -1,12 +1,10 @@
-'use strict'
-
 /* global describe, it */
 
 import {expect} from 'chai'
 import {handler} from '../../src/index'
 import {CONTENT_TYPE} from '../../src/api'
 import {filter, head} from 'lodash/fp'
-import {Status} from 'starhs-models'
+import {Status} from 'rheactor-models'
 import Promise from 'bluebird'
 const headers = {'Content-type': CONTENT_TYPE}
 

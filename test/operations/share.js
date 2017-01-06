@@ -1,5 +1,3 @@
-'use strict'
-
 /* global describe, it */
 
 import {expect} from 'chai'
@@ -7,7 +5,7 @@ import {generateToken} from './token'
 import shareHandler from '../../src/operations/share'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
-import URIValue from 'rheactor-value-objects/uri'
+import {URIValue} from 'rheactor-value-objects'
 const mountURL = new URIValue('https://api.example.com/')
 
 describe('/share', () => {

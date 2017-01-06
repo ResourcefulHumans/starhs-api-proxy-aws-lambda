@@ -1,10 +1,7 @@
-'use strict'
-
-import {JsonWebTokenType} from '../api'
-import {StaRHsAPIClient} from '../apiclient'
-import {Profile, StaRH, Link} from 'starhs-models'
-import URIValue from 'rheactor-value-objects/uri'
-import EmailValue from 'rheactor-value-objects/email'
+import {StaRHsAPIClientType} from '../apiclient'
+import {Profile, StaRH} from 'starhs-models'
+import {JsonWebTokenType, Link} from 'rheactor-models'
+import {EmailValue, URIValue, URIValueType} from 'rheactor-value-objects'
 import {trim} from 'lodash'
 
 /**
@@ -16,7 +13,7 @@ import {trim} from 'lodash'
  * @returns {Promise.<Object>}
  */
 const profile = (mountURL, apiClient, body, parts, token) => {
-  StaRHsAPIClient.Type(apiClient)
+  StaRHsAPIClientType(apiClient)
   JsonWebTokenType(token)
   const username = parts[0]
   if (username !== token.sub) {
@@ -50,7 +47,7 @@ const profile = (mountURL, apiClient, body, parts, token) => {
  * @param {StaRHsAPIClient} apiClient
  */
 export default (mountURL, apiClient) => {
-  URIValue.Type(mountURL)
+  URIValueType(mountURL)
   return {
     post: profile.bind(null, mountURL.slashless(), apiClient)
   }

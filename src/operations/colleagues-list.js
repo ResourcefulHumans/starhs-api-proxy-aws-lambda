@@ -1,13 +1,10 @@
-'use strict'
-
-import {JsonWebTokenType} from '../api'
-import {StaRHsAPIClient, QueryOptions} from '../apiclient'
-import {Profile, List, Link} from 'starhs-models'
-import URIValue from 'rheactor-value-objects/uri'
-import EmailValue from 'rheactor-value-objects/email'
+import {StaRHsAPIClientType, QueryOptions} from '../apiclient'
+import {Profile} from 'starhs-models'
+import {URIValue, URIValueType, EmailValue} from 'rheactor-value-objects'
 import Joi from 'joi'
-import HttpProblem from 'rheactor-models/http-problem'
+import {List, Link, JsonWebTokenType} from 'rheactor-models'
 import {merge, trim} from 'lodash'
+import {joiErrorToHttpProblem} from '../api'
 
 /**
  * @param {URIValue} mountURL
@@ -19,8 +16,8 @@ import {merge, trim} from 'lodash'
  * @returns {Promise.<Object>}
  */
 const list = (mountURL, apiClient, body, parts, token, qs) => {
-  URIValue.Type(mountURL)
-  StaRHsAPIClient.Type(apiClient)
+  URIValueType(mountURL)
+  StaRHsAPIClientType(apiClient)
   JsonWebTokenType(token)
   const username = parts[0]
   if (username !== token.sub) {
@@ -32,7 +29,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   })
   const v = Joi.validate(query, schema, {convert: true})
   if (v.error) {
-    throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed', v.error.toString(), 400, v.error)
+    throw joiErrorToHttpProblem(v.error)
   }
 
   const opts = new QueryOptions({offset: v.value.offset, itemsPerPage: Number.MAX_SAFE_INTEGER}) // FIXME: https://github.com/ResourcefulHumans/staRHs/issues/24, pagination is impossible
@@ -80,7 +77,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
  * @param {StaRHsAPIClient} apiClient
  */
 export default (mountURL, apiClient) => {
-  URIValue.Type(mountURL)
+  URIValueType(mountURL)
   return {
     post: list.bind(null, mountURL.slashless(), apiClient)
   }

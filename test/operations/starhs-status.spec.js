@@ -1,14 +1,12 @@
-'use strict'
-
 /* global describe, it */
 
-const expect = require('chai').expect
+import {expect} from 'chai'
 import staRHsStatusHandler from '../../src/operations/starhs-status'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {StaRHsStatusType} from 'starhs-models'
 import {generateToken} from './token'
-import URIValue from 'rheactor-value-objects/uri'
+import {URIValue} from 'rheactor-value-objects'
 
 describe('/staRHsStatus', () => {
   it('should return status', () => {

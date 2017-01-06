@@ -1,5 +1,5 @@
-const JsonWebToken = require('rheactor-models/jsonwebtoken')
-const jwt = require('jsonwebtoken')
+import {JsonWebToken} from 'rheactor-models'
+import jwt from 'jsonwebtoken'
 import Promise from 'bluebird'
 
 export function generateToken () {

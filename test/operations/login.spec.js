@@ -1,13 +1,10 @@
-'use strict'
-
 /* global describe, it */
 
 import {expect} from 'chai'
-import JsonWebToken from 'rheactor-models/jsonwebtoken'
+import {JsonWebToken, HttpProblem} from 'rheactor-models'
 import jwt from 'jsonwebtoken'
 import {handler as loginHandler, LoginSuccess} from '../../src/operations/login'
-import HttpProblem from 'rheactor-models/http-problem'
-import URIValue from 'rheactor-value-objects/uri'
+import {URIValue} from 'rheactor-value-objects'
 import {StaRHsStatus, Profile} from 'starhs-models'
 import {itShouldHaveLinkTo} from './helper'
 const mountURL = new URIValue('https://api.example.com/')

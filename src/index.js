@@ -1,5 +1,3 @@
-'use strict'
-
 import Promise from 'bluebird'
 import {CONTENT_TYPE, checkContentType, getOptionalToken} from './api'
 import Joi from 'joi'
@@ -13,9 +11,8 @@ import profileHandler from './operations/profile'
 import staRHsListHandler from './operations/starhs-list'
 import colleaguesListHandler from './operations/colleagues-list'
 import shareHandler from './operations/share'
-import JsonWebToken from 'rheactor-models/jsonwebtoken'
-import URIValue from 'rheactor-value-objects/uri'
-import {Status} from 'starhs-models'
+import {JsonWebToken, HttpProblem, Status} from 'rheactor-models'
+import {URIValue} from 'rheactor-value-objects'
 
 const {key, user, password} = config.get('starhsapi')
 const apiClient = new StaRHsAPIClient(key, user, password)
@@ -23,7 +20,7 @@ const mountURL = new URIValue(config.get('mount_url'))
 const operations = {
   index: indexHandler(mountURL, {
     'status': Status.$context,
-    'login': new URIValue(JsonWebToken.$context)
+    'login': JsonWebToken.$context
   }),
   login: loginHandler(mountURL, apiClient),
   staRHsStatus: staRHsStatusHandler(apiClient),
@@ -33,7 +30,6 @@ const operations = {
   colleagues: colleaguesListHandler(mountURL, apiClient),
   status: statusHandler
 }
-const HttpProblem = require('rheactor-models/http-problem')
 
 /**
  * @param {{headers: object, path: string, httpMethod: string, body: string, queryStringParameters: object}} event

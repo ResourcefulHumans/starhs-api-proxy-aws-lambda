@@ -1,9 +1,5 @@
-'use strict'
-
-const _map = require('lodash/map')
-
 const header = (headers, header) => {
-  return _map(headers, header => header.toLower())[header]
+  return headers.map(header => header.toLower())[header]
 }
 
 module.exports = {

@@ -1,17 +1,15 @@
-'use strict'
-
 import Promise from 'bluebird'
 import {forIn} from 'lodash'
-import URIValue from 'rheactor-value-objects/uri'
+import {URIValue, URIValueType} from 'rheactor-value-objects'
 import {Object as ObjectType} from 'tcomb'
-import {Link} from 'starhs-models'
+import {Link} from 'rheactor-models'
 
 /**
  * @param {URIValue} mountURL
  * @param {object} routes
  */
 export default function (mountURL, routes) {
-  URIValue.Type(mountURL)
+  URIValueType(mountURL)
   ObjectType(routes)
   return {
     get: () => Promise.try(() => {

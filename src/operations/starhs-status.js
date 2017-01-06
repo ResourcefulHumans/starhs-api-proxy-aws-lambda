@@ -1,7 +1,5 @@
-'use strict'
-
-import {JsonWebTokenType} from '../api'
-import {StaRHsAPIClient} from '../apiclient'
+import {JsonWebTokenType} from 'rheactor-models'
+import {StaRHsAPIClientType} from '../apiclient'
 import {StaRHsStatus} from 'starhs-models'
 
 /**
@@ -12,7 +10,7 @@ import {StaRHsStatus} from 'starhs-models'
  * @returns {Promise.<Object>}
  */
 const staRHsStatus = (apiClient, body, parts, token) => {
-  StaRHsAPIClient.Type(apiClient)
+  StaRHsAPIClientType(apiClient)
   JsonWebTokenType(token)
   JsonWebTokenType(token)
   const username = parts[0]

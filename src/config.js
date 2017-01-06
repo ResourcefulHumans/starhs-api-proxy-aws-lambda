@@ -1,6 +1,4 @@
-'use strict'
-
-const nconf = require('nconf')
+import nconf from 'nconf'
 
 nconf.use('memory')
 
@@ -31,4 +29,4 @@ nconf.defaults({
   'deploy_time': Date.now()
 })
 
-module.exports = nconf
+export default nconf

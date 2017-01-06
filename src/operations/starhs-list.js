@@ -1,15 +1,13 @@
-'use strict'
-
-import {JsonWebTokenType} from '../api'
-import {StaRHsAPIClient, QueryOptions} from '../apiclient'
-import {StaRH, List, Link} from 'starhs-models'
-import URIValue from 'rheactor-value-objects/uri'
+import {StaRHsAPIClientType, QueryOptions} from '../apiclient'
+import {StaRH} from 'starhs-models'
+import {URIValue, URIValueType} from 'rheactor-value-objects'
+import {JsonWebTokenType, List, Link} from 'rheactor-models'
 import Joi from 'joi'
 import profileHandler from './profile'
 import staRHsStatusHandler from './starhs-status'
-import HttpProblem from 'rheactor-models/http-problem'
 import Promise from 'bluebird'
 import {merge} from 'lodash'
+import {joiErrorToHttpProblem} from '../api'
 
 /**
  * @param {URIValue} mountURL
@@ -21,8 +19,8 @@ import {merge} from 'lodash'
  * @returns {Promise.<Object>}
  */
 const list = (mountURL, apiClient, body, parts, token, qs) => {
-  URIValue.Type(mountURL)
-  StaRHsAPIClient.Type(apiClient)
+  URIValueType(mountURL)
+  StaRHsAPIClientType(apiClient)
   JsonWebTokenType(token)
   const username = parts[0]
   if (username !== token.sub) {
@@ -36,7 +34,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   })
   const v = Joi.validate(query, schema, {convert: true})
   if (v.error) {
-    throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed', v.error.toString(), 400, v.error)
+    throw joiErrorToHttpProblem(v.error)
   }
 
   const received = v.value.which === 'received'
@@ -105,7 +103,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
  * @param {StaRHsAPIClient} apiClient
  */
 export default (mountURL, apiClient) => {
-  URIValue.Type(mountURL)
+  URIValueType(mountURL)
   return {
     post: list.bind(null, mountURL.slashless(), apiClient)
   }

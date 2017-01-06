@@ -1,11 +1,9 @@
-'use strict'
-
-import HttpProblem from 'rheactor-models/http-problem'
-import URIValue from 'rheactor-value-objects/uri'
+import {JsonWebTokenType, HttpProblem} from 'rheactor-models'
+import {URIValueType} from 'rheactor-value-objects'
 import staRHsStatusHandler from './starhs-status'
-import {JsonWebTokenType} from '../api'
-import {StaRHsAPIClient} from '../apiclient'
+import {StaRHsAPIClientType} from '../apiclient'
 import Joi from 'joi'
+import {joiErrorToHttpProblem} from '../api'
 
 /**
  * @param {URIValue} mountURL
@@ -16,8 +14,8 @@ import Joi from 'joi'
  * @returns {Promise}
  */
 const share = (mountURL, apiClient, body, parts, token) => {
-  URIValue.Type(mountURL)
-  StaRHsAPIClient.Type(apiClient)
+  URIValueType(mountURL)
+  StaRHsAPIClientType(apiClient)
   JsonWebTokenType(token)
   const schema = Joi.object().keys({
     to: Joi.string().trim().required(),
@@ -26,7 +24,7 @@ const share = (mountURL, apiClient, body, parts, token) => {
   })
   const v = Joi.validate(body, schema, {convert: true})
   if (v.error) {
-    throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed', v.error.toString(), 400, v.error)
+    throw joiErrorToHttpProblem(v.error)
   }
 
   return staRHsStatusHandler(apiClient).post({}, [token.sub], token)
@@ -53,7 +51,7 @@ const share = (mountURL, apiClient, body, parts, token) => {
  * @param {StaRHsAPIClient} apiClient
  */
 export default function handler (mountURL, apiClient) {
-  URIValue.Type(mountURL)
+  URIValueType(mountURL)
   return {
     post: share.bind(null, mountURL.slashless(), apiClient)
   }

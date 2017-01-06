@@ -1,16 +1,14 @@
-'use strict'
-
 import Joi from 'joi'
 import jwt from 'jsonwebtoken'
 import config from '../config'
-import HttpProblem from 'rheactor-models/http-problem'
-import URIValue from 'rheactor-value-objects/uri'
+import {URIValue, URIValueType} from 'rheactor-value-objects'
 import {irreducible} from 'tcomb'
-import {Link, Model, StaRHsStatus, Profile} from 'starhs-models'
-import JsonWebToken from 'rheactor-models/jsonwebtoken'
+import {StaRHsStatus, Profile} from 'starhs-models'
+import {Link, Model, JsonWebToken, JsonWebTokenType, HttpProblem} from 'rheactor-models'
 import {merge} from 'lodash'
-import {JsonWebTokenType} from '../api'
 import {StatusCodeError} from 'request-promise/errors'
+import {joiErrorToHttpProblem} from '../api'
+
 const {key, user, password} = config.get('starhsapi')
 const $context = new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#LoginSuccess')
 
@@ -62,14 +60,14 @@ export const LoginSuccessType = irreducible('LoginSuccessType', (x) => x instanc
  * @returns {Promise.<LoginSuccess>}
  */
 const login = (mountURL, apiClient, body) => {
-  URIValue.Type(mountURL)
+  URIValueType(mountURL)
   const schema = Joi.object().keys({
     username: Joi.string().trim().required(),
     password: Joi.string().required().trim()
   })
   const v = Joi.validate(body, schema, {convert: true})
   if (v.error) {
-    throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed', v.error.toString(), 400, v.error)
+    throw joiErrorToHttpProblem(v.error)
   }
 
   return apiClient.loginWithUserId(v.value.username, v.value.password)
@@ -105,7 +103,7 @@ const login = (mountURL, apiClient, body) => {
  * @param {StaRHsAPIClient} apiClient
  */
 export function handler (mountURL, apiClient) {
-  URIValue.Type(mountURL)
+  URIValueType(mountURL)
   return {
     post: login.bind(null, mountURL.slashless(), apiClient)
   }

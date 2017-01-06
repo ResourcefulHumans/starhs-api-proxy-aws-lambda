@@ -1,9 +1,8 @@
-'use strict'
-
 import rp from 'request-promise'
 import moment from 'moment'
 import {String as StringType, Date as DateType, Number as NumberType, irreducible, maybe, refinement} from 'tcomb'
-import URIValue from 'rheactor-value-objects/uri'
+import {URIValue, URIValueType} from 'rheactor-value-objects'
+
 const PositiveIntegerType = refinement(NumberType, n => n > 0 && n % 1 === 0, 'PositiveIntegerType')
 
 const ENDPOINT = 'https://services.digital-bauhaus.solutions/RH-API/V0.94'
@@ -24,7 +23,7 @@ export class QueryOptions {
   }
 }
 
-QueryOptions.Type = irreducible('QueryOptionsType', (x) => x instanceof QueryOptions)
+export const QueryOptionsType = irreducible('QueryOptionsType', (x) => x instanceof QueryOptions)
 
 /**
  * @type StaRHsAPIClient
@@ -40,7 +39,7 @@ export class StaRHsAPIClient {
     StringType(key)
     StringType(user)
     StringType(password)
-    URIValue.Type(endpoint)
+    URIValueType(endpoint)
     this.key = key
     this.user = user
     this.password = password
@@ -141,9 +140,9 @@ export class StaRHsAPIClient {
    * @private
    */
   static _getStaRHs (endpoint, sessionToken, opts) {
-    URIValue.Type(endpoint)
+    URIValueType(endpoint)
     StringType(sessionToken)
-    QueryOptions.Type(opts)
+    QueryOptionsType(opts)
     const from = opts.from || new Date('2015-01-01')
     const to = opts.to || moment().endOf('day')
     const itemsPerPage = opts.itemsPerPage || 10
@@ -178,7 +177,7 @@ export class StaRHsAPIClient {
    */
   getStaRHsReceived (sessionToken, opts) {
     StringType(sessionToken)
-    QueryOptions.Type(opts)
+    QueryOptionsType(opts)
     const self = this
     return self.constructor._getStaRHs(new URIValue(self.endpoint.slashless().toString() + '/starhs/get-StarhsReceived'), sessionToken, opts)
   }
@@ -191,7 +190,7 @@ export class StaRHsAPIClient {
    */
   getStaRHsShared (sessionToken, opts) {
     StringType(sessionToken)
-    QueryOptions.Type(opts)
+    QueryOptionsType(opts)
     const self = this
     return self.constructor._getStaRHs(new URIValue(self.endpoint.slashless().toString() + '/starhs/get-StarhsShared'), sessionToken, opts)
   }
@@ -239,7 +238,7 @@ export class StaRHsAPIClient {
    */
   getClientEmployees (sessionToken, opts) {
     StringType(sessionToken)
-    QueryOptions.Type(opts)
+    QueryOptionsType(opts)
     const self = this
     const offset = opts.offset || 0
     const itemsPerPage = opts.itemsPerPage || 100
@@ -325,4 +324,4 @@ export class StaRHsAPIClient {
   }
 }
 
-StaRHsAPIClient.Type = irreducible('StaRHsAPIClientType', (x) => x instanceof StaRHsAPIClient)
+export const StaRHsAPIClientType = irreducible('StaRHsAPIClientType', (x) => x instanceof StaRHsAPIClient)

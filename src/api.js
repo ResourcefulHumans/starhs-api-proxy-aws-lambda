@@ -1,11 +1,9 @@
-'use strict'
-
 import config from './config'
 import {forIn} from 'lodash'
 import jwt from 'jsonwebtoken'
-import JsonWebToken from 'rheactor-models/jsonwebtoken'
+import {JsonWebToken, HttpProblem} from 'rheactor-models'
 import Promise from 'bluebird'
-import {irreducible} from 'tcomb'
+import {struct, list, refinement, Boolean as BooleanType, String as StringType} from 'tcomb'
 
 export const CONTENT_TYPE = config.get('mime_type') + '; charset=utf-8'
 const {key, user, password} = config.get('starhsapi')
@@ -56,4 +54,23 @@ export function getOptionalToken (event) {
   })
 }
 
-export const JsonWebTokenType = irreducible('JsonWebTokenType', (x) => x instanceof JsonWebToken)
+/**
+ * Convert a Joi Error into a HttpProblem
+ *
+ * @param error
+ * @returns {*}
+ */
+export function joiErrorToHttpProblem (error) {
+  JoiErrorType(error)
+  return new HttpProblem(
+    'https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed',
+    error.toString(),
+    400,
+    error.details.map(d => d.message).join(', ')
+  )
+}
+
+const JoiErrorType = struct({
+  isJoi: refinement(BooleanType, b => b, 'isJoiContext'),
+  details: list(struct({message: StringType}))
+}, 'JoiErrorType')

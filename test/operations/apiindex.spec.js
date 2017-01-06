@@ -1,11 +1,9 @@
-'use strict'
-
 /* global describe, it */
 
 import {expect} from 'chai'
 import handler from '../../src/operations/apiindex'
-import {Status} from 'starhs-models'
-import URIValue from 'rheactor-value-objects/uri'
+import {Status} from 'rheactor-models'
+import {URIValue} from 'rheactor-value-objects'
 
 describe('apiindex', () => {
   it('should create a list of links', () => {
