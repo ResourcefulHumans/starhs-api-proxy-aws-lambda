@@ -37,7 +37,7 @@
     "nconf": "^0.8.4",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
-    "rheactor-models": "^2.0.1",
+    "rheactor-models": "^2.2.0",
     "rheactor-value-objects": "^4.1.0",
     "starhs-models": "^6.0.1",
     "tcomb": "^3.2.16"
