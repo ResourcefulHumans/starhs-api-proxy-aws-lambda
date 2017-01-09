@@ -24,7 +24,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   JsonWebTokenType(token)
   const username = parts[0]
   if (username !== token.sub) {
-    throw new Error(`${username} is not you!`)
+    return Promise.reject(new Error(`${username} is not you!`))
   }
   const query = merge({}, qs)
   query.which = parts[1]
@@ -34,7 +34,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   })
   const v = Joi.validate(query, schema, {convert: true})
   if (v.error) {
-    throw joiErrorToHttpProblem(v.error)
+    return Promise.reject(joiErrorToHttpProblem(v.error))
   }
 
   const received = v.value.which === 'received'

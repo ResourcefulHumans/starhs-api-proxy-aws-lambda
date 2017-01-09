@@ -21,7 +21,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   JsonWebTokenType(token)
   const username = parts[0]
   if (username !== token.sub) {
-    throw new Error(`${username} is not you!`)
+    return Promise.reject(new Error(`${username} is not you!`))
   }
   const query = merge({}, qs)
   const schema = Joi.object().keys({
@@ -29,7 +29,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   })
   const v = Joi.validate(query, schema, {convert: true})
   if (v.error) {
-    throw joiErrorToHttpProblem(v.error)
+    return Promise.reject(joiErrorToHttpProblem(v.error))
   }
 
   const opts = new QueryOptions({offset: v.value.offset, itemsPerPage: Number.MAX_SAFE_INTEGER}) // FIXME: https://github.com/ResourcefulHumans/staRHs/issues/24, pagination is impossible

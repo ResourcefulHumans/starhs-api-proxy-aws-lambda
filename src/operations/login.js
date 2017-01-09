@@ -67,7 +67,7 @@ const login = (mountURL, apiClient, body) => {
   })
   const v = Joi.validate(body, schema, {convert: true})
   if (v.error) {
-    throw joiErrorToHttpProblem(v.error)
+    return Promise.reject(joiErrorToHttpProblem(v.error))
   }
 
   return apiClient.loginWithUserId(v.value.username, v.value.password)

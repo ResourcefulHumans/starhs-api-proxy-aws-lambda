@@ -17,7 +17,7 @@ const profile = (mountURL, apiClient, body, parts, token) => {
   JsonWebTokenType(token)
   const username = parts[0]
   if (username !== token.sub) {
-    throw new Error(`${username} is not you!`)
+    return Promise.reject(new Error(`${username} is not you!`))
   }
   return apiClient.getProfile(token.payload.SessionToken)
     .then(

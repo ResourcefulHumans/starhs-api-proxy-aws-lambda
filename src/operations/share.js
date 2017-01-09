@@ -24,7 +24,7 @@ const share = (mountURL, apiClient, body, parts, token) => {
   })
   const v = Joi.validate(body, schema, {convert: true})
   if (v.error) {
-    throw joiErrorToHttpProblem(v.error)
+    return Promise.reject(joiErrorToHttpProblem(v.error))
   }
 
   return staRHsStatusHandler(apiClient).post({}, [token.sub], token)

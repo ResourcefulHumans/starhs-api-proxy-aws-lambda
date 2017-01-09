@@ -52,16 +52,27 @@ describe('/login', () => {
       [{username: 'foo', password: ''}, 'ValidationError: child "password" fails because ["password" is not allowed to be empty]']
     ]
     for (let i = 0; i < scenarios.length; i++) {
-      try {
-        login.post(scenarios[i][0])
-      } catch (err) {
+      login.post(scenarios[i][0])
+        .catch(err => {
+          expect(err).to.be.instanceof(HttpProblem)
+          expect(err.status).to.equal(400)
+          expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed')
+          expect(err.title).to.equal(scenarios[i][1])
+          expect(err.detail).to.not.equal(undefined)
+        })
+    }
+  })
+  it('should throw an exception if extra data is passed', done => {
+    const login = loginHandler(mountURL, {})
+    login.post({username: 'foo', password: 'bar', extra: 'buzz'})
+      .catch(err => {
         expect(err).to.be.instanceof(HttpProblem)
         expect(err.status).to.equal(400)
         expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed')
-        expect(err.title).to.equal(scenarios[i][1])
+        expect(err.title).to.equal('ValidationError: "extra" is not allowed')
         expect(err.detail).to.not.equal(undefined)
-      }
-    }
+        done()
+      })
   })
   it('should throw an exception if extra data is passed', () => {
     const login = loginHandler(mountURL, {})
