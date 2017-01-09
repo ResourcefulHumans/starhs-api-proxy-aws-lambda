@@ -7,6 +7,9 @@ import {handler as loginHandler, LoginSuccess} from '../../src/operations/login'
 import {URIValue} from 'rheactor-value-objects'
 import {StaRHsStatus, Profile} from 'starhs-models'
 import {itShouldHaveLinkTo} from './helper'
+import {StatusCodeError} from 'request-promise/errors'
+import Promise from 'bluebird'
+
 const mountURL = new URIValue('https://api.example.com/')
 
 describe('/login', () => {
@@ -74,16 +77,24 @@ describe('/login', () => {
         done()
       })
   })
-  it('should throw an exception if extra data is passed', () => {
-    const login = loginHandler(mountURL, {})
-    try {
-      login.post({username: 'foo', password: 'bar', extra: 'buzz'})
-    } catch (err) {
-      expect(err).to.be.instanceof(HttpProblem)
-      expect(err.status).to.equal(400)
-      expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed')
-      expect(err.title).to.equal('ValidationError: "extra" is not allowed')
-      expect(err.detail).to.not.equal(undefined)
-    }
+  it('should handle staRHs backend error 500 on invalid credentials', done => {
+    const msg = '{"Message":"Fehler","ExceptionMessage":"Login credentials wrong! Generation of Session failed","ExceptionType":"System.Exception","StackTrace":null}'
+    const login = loginHandler(mountURL, {
+      loginWithUserId: () => Promise.try(() => {
+        throw new StatusCodeError(
+          500,
+          JSON.parse(msg)
+        )
+      })
+    })
+    login.post({username: 'foo', password: 'bar'})
+      .catch(err => {
+        expect(err).to.be.instanceof(HttpProblem)
+        expect(err.status).to.equal(403)
+        expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Forbidden')
+        expect(err.title).to.equal('Login credentials wrong! Generation of Session failed')
+        expect(err.detail).to.equal(msg)
+        done()
+      })
   })
 })

@@ -91,7 +91,7 @@ const login = (mountURL, apiClient, body) => {
     })
     .catch(StatusCodeError, reason => {
       if (reason.statusCode === 500 && reason.error.ExceptionMessage.match(/Login credentials wrong/)) {
-        throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Forbidden', reason.error.ExceptionMessage, 403, reason.error)
+        throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Forbidden', reason.error.ExceptionMessage, 403, JSON.stringify(reason.error))
       } else {
         throw reason
       }
