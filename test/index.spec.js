@@ -4,6 +4,7 @@ import {expect} from 'chai'
 import {handler} from '../src/index'
 import {CONTENT_TYPE} from '../src/api'
 import {HttpProblem} from 'rheactor-models'
+import {URIValue} from 'rheactor-value-objects'
 
 const headers = {'Content-type': CONTENT_TYPE}
 
@@ -20,11 +21,11 @@ describe('index', () => {
         'Content-Type': CONTENT_TYPE,
         'Access-Control-Allow-Origin': '*'
       })
-      const expectedProblem = new HttpProblem('Error', 'Unknown operation "/some/operation"', 404)
+      const expectedProblem = new HttpProblem(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Error'), 'Unknown operation "/some/operation"', 404)
       const body = JSON.parse(res.body)
       const sentProblem = HttpProblem.fromJSON(body)
       expect(sentProblem.name).to.equal(expectedProblem.name)
-      expect(sentProblem.error).to.equal(expectedProblem.error)
+      expect(sentProblem.type.equals(expectedProblem.type)).to.equal(true)
       expect(sentProblem.title).to.equal(expectedProblem.title)
       expect(sentProblem.$context).to.equal(expectedProblem.$context)
       done()
@@ -47,11 +48,11 @@ describe('index', () => {
         'Content-Type': CONTENT_TYPE,
         'Access-Control-Allow-Origin': '*'
       })
-      const expectedProblem = new HttpProblem('Error', 'Unsupported action "DELETE /status"', 400)
+      const expectedProblem = new HttpProblem(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Error'), 'Unsupported action "DELETE /status"', 400)
       const body = JSON.parse(res.body)
       const sentProblem = HttpProblem.fromJSON(body)
       expect(sentProblem.name).to.equal(expectedProblem.name)
-      expect(sentProblem.error).to.equal(expectedProblem.error)
+      expect(sentProblem.type.equals(expectedProblem.type)).to.equal(true)
       expect(sentProblem.title).to.equal(expectedProblem.title)
       expect(sentProblem.$context).to.equal(expectedProblem.$context)
       done()
@@ -74,11 +75,11 @@ describe('index', () => {
         'Content-Type': CONTENT_TYPE,
         'Access-Control-Allow-Origin': '*'
       })
-      const expectedProblem = new HttpProblem('Error', 'Unexpected token b in JSON at position 1', 400)
+      const expectedProblem = new HttpProblem(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#SyntaxError'), 'Unexpected token b in JSON at position 1', 400)
       const body = JSON.parse(res.body)
       const sentProblem = HttpProblem.fromJSON(body)
       expect(sentProblem.name).to.equal(expectedProblem.name)
-      expect(sentProblem.error).to.equal(expectedProblem.error)
+      expect(sentProblem.type.equals(expectedProblem.type)).to.equal(true)
       expect(sentProblem.title).to.equal(expectedProblem.title)
       expect(sentProblem.$context).to.equal(expectedProblem.$context)
       done()

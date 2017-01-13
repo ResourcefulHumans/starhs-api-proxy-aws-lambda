@@ -1,5 +1,5 @@
 import {JsonWebTokenType, HttpProblem} from 'rheactor-models'
-import {URIValueType} from 'rheactor-value-objects'
+import {URIValue, URIValueType} from 'rheactor-value-objects'
 import staRHsStatusHandler from './starhs-status'
 import {StaRHsAPIClientType} from '../apiclient'
 import Joi from 'joi'
@@ -33,7 +33,7 @@ const share = (mountURL, apiClient, body, parts, token) => {
        * @param {StaRHsStatus} status
        */
       status => {
-        if (status.cycleLeft < v.value.amount) throw new HttpProblem('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed', `You have only ${status.cycleLeft} left in this cycle which is not enough to share a staRH with ${v.value.amount} staRHs.`, 400, v.error)
+        if (status.cycleLeft < v.value.amount) throw new HttpProblem(URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed'), `You have only ${status.cycleLeft} left in this cycle which is not enough to share a staRH with ${v.value.amount} staRHs.`, 400, v.error)
         return apiClient.shareStaRH(
           token.payload.SessionToken,
           v.value.to,

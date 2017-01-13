@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 import {JsonWebToken, HttpProblem} from 'rheactor-models'
 import Promise from 'bluebird'
 import {struct, list, refinement, Boolean as BooleanType, String as StringType} from 'tcomb'
+import {URIValue} from 'rheactor-value-objects'
 
 export const CONTENT_TYPE = config.get('mime_type') + '; charset=utf-8'
 const {key, user, password} = config.get('starhsapi')
@@ -63,7 +64,7 @@ export function getOptionalToken (event) {
 export function joiErrorToHttpProblem (error) {
   JoiErrorType(error)
   return new HttpProblem(
-    'https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed',
+    new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed'),
     error.toString(),
     400,
     error.details.map(d => d.message).join(', ')

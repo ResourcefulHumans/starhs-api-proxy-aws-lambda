@@ -42,7 +42,7 @@ export function handler (event, context, callback) {
     /* istanbul ignore next */
     if (err && config.get('environment') !== 'testing') console.error(err)
     if (err && !(err instanceof HttpProblem)) {
-      err = new HttpProblem(err.constructor.name, err.message, 400)
+      err = new HttpProblem(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#' + err.constructor.name), err.message, 400)
     }
     return callback(null, {
       statusCode: err ? err.status : (res ? statusCode : 204),
@@ -60,11 +60,11 @@ export function handler (event, context, callback) {
       const parts = event.path.split('/')
       parts.shift()
       let operation = parts.shift()
-      if (!operation.length || !operations[operation]) throw new HttpProblem('Error', `Unknown operation "${event.path}"`, 404)
+      if (!operation.length || !operations[operation]) throw new HttpProblem(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Error'), `Unknown operation "${event.path}"`, 404)
       const v = Joi.validate(event.httpMethod, Joi.string().lowercase().required().valid(['GET', 'POST']))
       const method = v.value.toLowerCase()
       if (v.error || !operations[operation][method]) {
-        throw new HttpProblem('Error', `Unsupported action "${event.httpMethod} ${event.path}"`, 400)
+        throw new HttpProblem(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Error'), `Unsupported action "${event.httpMethod} ${event.path}"`, 400)
       }
       const body = event.body ? JSON.parse(event.body) : {}
       return getOptionalToken(event)

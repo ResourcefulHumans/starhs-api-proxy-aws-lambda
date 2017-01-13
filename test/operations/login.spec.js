@@ -59,7 +59,7 @@ describe('/login', () => {
         .catch(err => {
           expect(err).to.be.instanceof(HttpProblem)
           expect(err.status).to.equal(400)
-          expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed')
+          expect(err.type.equals(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed'))).to.equal(true)
           expect(err.title).to.equal(scenarios[i][1])
           expect(err.detail).to.not.equal(undefined)
         })
@@ -71,7 +71,7 @@ describe('/login', () => {
       .catch(err => {
         expect(err).to.be.instanceof(HttpProblem)
         expect(err.status).to.equal(400)
-        expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed')
+        expect(err.type.equals(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed'))).to.equal(true)
         expect(err.title).to.equal('ValidationError: "extra" is not allowed')
         expect(err.detail).to.not.equal(undefined)
         done()
@@ -91,7 +91,7 @@ describe('/login', () => {
       .catch(err => {
         expect(err).to.be.instanceof(HttpProblem)
         expect(err.status).to.equal(403)
-        expect(err.type).to.equal('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Forbidden')
+        expect(err.type.equals(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Forbidden'))).to.equal(true)
         expect(err.title).to.equal('Login credentials wrong! Generation of Session failed')
         expect(err.detail).to.equal(msg)
         done()
