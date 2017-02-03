@@ -5,7 +5,7 @@ import {URIValue, URIValueType} from 'rheactor-value-objects'
 
 const PositiveIntegerType = refinement(NumberType, n => n > 0 && n % 1 === 0, 'PositiveIntegerType')
 
-const ENDPOINT = 'https://services.digital-bauhaus.solutions/RH-API/V0.94'
+const ENDPOINT = new URIValue('https://services.digital-bauhaus.solutions/RH-API/V0.94')
 
 export class QueryOptions {
   /**
@@ -35,7 +35,7 @@ export class StaRHsAPIClient {
    * @param {String} password
    * @param {URIValue} endpoint
    */
-  constructor (key, user, password, endpoint = new URIValue(ENDPOINT)) {
+  constructor (key, user, password, endpoint = ENDPOINT) {
     StringType(key)
     StringType(user)
     StringType(password)

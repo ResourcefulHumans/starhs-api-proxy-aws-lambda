@@ -27,7 +27,7 @@ const profile = (mountURL, apiClient, body, parts, token) => {
        */
       response => {
         const profile = new Profile({
-          $id: response.PKUser,
+          $id: new URIValue(`${apiClient.endpoint}#profile:${response.PKUser}`),
           email: new EmailValue(trim(response.EMail)),
           firstname: response.Forename,
           lastname: response.Name,

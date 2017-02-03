@@ -27,27 +27,28 @@
   },
   "homepage": "https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#readme",
   "dependencies": {
-    "aws-sdk": "^2.7.21",
+    "@resourcefulhumans/rheactor-errors": "1.x",
+    "aws-sdk": "^2.9.0",
     "bluebird": "^3.4.7",
     "glob": "^7.1.1",
-    "joi": "^10.1.0",
+    "joi": "^10.2.1",
     "jsonwebtoken": "^7.2.1",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
     "nconf": "^0.8.4",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
-    "rheactor-models": ">=2.4.0 <3.0.0",
-    "rheactor-value-objects": "8.x",
-    "starhs-models": "6.x",
+    "rheactor-models": "3.x >=3.2.1",
+    "rheactor-value-objects": "9.x >=9.0.1",
+    "starhs-models": "7.x",
     "tcomb": "^3.2.16"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
+    "babel-cli": "^6.22.2",
     "babel-eslint": "^7.1.1",
     "babel-preset-env": "^1.1.8",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-register": "^6.18.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-register": "^6.22.0",
     "chai": "^3.5.0",
     "codeclimate-test-reporter": "^0.4.0",
     "husky": "<2.0.0",
@@ -56,7 +57,7 @@
     "mocha-lcov-reporter": "^1.2.0",
     "semantic-release": "^6.3.2",
     "standard": "^8.4.0",
-    "validate-commit-msg": "^2.8.2"
+    "validate-commit-msg": "^2.11.1"
   },
   "standard": {
     "parser": "babel-eslint"

@@ -81,7 +81,7 @@ describe('/colleagues/{user}', () => {
             expect(list.hasPrev).to.equal(false)
             expect(list.items.length).to.equal(3)
             expect(list.items[0]).to.be.instanceof(Profile)
-            expect(list.items[0].$id).to.equal('9d1ecf8d-996e-4e5a-99e7-1a751157903a')
+            expect(list.items[0].$id.toString().split('#profile:')[1]).to.equal('9d1ecf8d-996e-4e5a-99e7-1a751157903a')
             expect(list.items[0].email.equals(new EmailValue('antarctica@example.com'))).to.equal(true)
             expect(list.items[0].firstname).to.equal('')
             expect(list.items[0].lastname).to.equal('Antarctica')
