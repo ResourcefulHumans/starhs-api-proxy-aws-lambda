@@ -31,6 +31,7 @@ const profile = (mountURL, apiClient, body, parts, token) => {
           email: new EmailValue(trim(response.EMail)),
           firstname: response.Forename,
           lastname: response.Name,
+          organization: response.Kunde1,
           avatar: response.URLPicture ? new URIValue(response.URLPicture) : undefined
         })
         profile.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'shared'].join('/')), StaRH.$context, true, 'shared-staRHs'))

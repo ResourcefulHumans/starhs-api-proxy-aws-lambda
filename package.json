@@ -40,7 +40,7 @@
     "request-promise": "^4.1.1",
     "rheactor-models": "3.x >=3.2.1",
     "rheactor-value-objects": "9.x >=9.0.1",
-    "starhs-models": "7.x",
+    "starhs-models": "7.x >=7.0.1",
     "tcomb": "^3.2.16"
   },
   "devDependencies": {
