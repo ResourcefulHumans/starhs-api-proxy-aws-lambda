@@ -32,7 +32,7 @@ describe('/share', () => {
     const share = shareHandler(mountURL, mockClient)
     generateToken()
       .then(token => share.post({
-        to: 'some-user-id',
+        to: 'https://services.digital-bauhaus.solutions/RH-API/V0.94#profile:some-user-id',
         message: 'a staRH for you',
         amount: 2
       }, [], token))
