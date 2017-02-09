@@ -54,7 +54,11 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
        * @param {Array<{To: string, ToID: string, ToURLPicture: string, No: number, Reason: string, Date: string}>} staRHs
        */
       (profile, status, staRHs) => {
-        const p = {name: profile.name, avatar: profile.avatar}
+        const p = {
+          $id: profile.$id,
+          name: profile.name,
+          avatar: profile.avatar
+        }
         const total = received ? status.totalReceived : status.totalShared
         const links = []
         let nextOffset
@@ -74,10 +78,12 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
             const amount = starh.No
             const message = starh.Reason
             const to = received ? p : {
+              $id: new URIValue(`${apiClient.endpoint}#profile:${starh.ToID}`),
               name: starh.To,
               avatar: starh.ToURLPicture ? new URIValue(starh.ToURLPicture) : undefined
             }
             const from = received ? {
+              $id: new URIValue(`${apiClient.endpoint}#profile:${starh.FromID}`),
               name: starh.From,
               avatar: starh.FromURLPicture ? new URIValue(starh.FromURLPicture) : undefined
             } : p

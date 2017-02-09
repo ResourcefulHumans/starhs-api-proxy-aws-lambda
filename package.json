@@ -38,9 +38,9 @@
     "nconf": "^0.8.4",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
-    "rheactor-models": "3.x >=3.2.1",
+    "rheactor-models": "3.x >=3.2.2",
     "rheactor-value-objects": "9.x >=9.0.1",
-    "starhs-models": "7.x >=7.0.1",
+    "starhs-models": "8.x",
     "tcomb": "^3.2.16"
   },
   "devDependencies": {
