@@ -8,6 +8,7 @@ import staRHsStatusHandler from './starhs-status'
 import Promise from 'bluebird'
 import {merge} from 'lodash'
 import {joiErrorToHttpProblem} from '../api'
+import crypto from 'crypto'
 
 /**
  * @param {URIValue} mountURL
@@ -81,8 +82,10 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
               avatar: starh.FromURLPicture ? new URIValue(starh.FromURLPicture) : undefined
             } : p
             const $createdAt = new Date(starh.Date)
+            const they = received ? starh.FromID : starh.ToID
+            const staRHhash = crypto.createHash('sha256').update(`${username}-${they}-${starh.Date}-${starh.Reason}`).digest('hex')
             return new StaRH({
-              $id: new URIValue(`${apiClient.endpoint}#staRH:${username}-${starh.FromID}-${starh.Date}`),
+              $id: new URIValue(`${apiClient.endpoint}#staRH:${staRHhash}`),
               from,
               to,
               amount,
