@@ -6,7 +6,7 @@ import Joi from 'joi'
 import {profileOperation} from './profile'
 import {staRHsStatusOperation} from './starhs-status'
 import Promise from 'bluebird'
-import {joiErrorToHttpProblem} from '@resourcefulhumans/rheactor-aws-lambda'
+import {joiErrorToHttpProblem} from '../util'
 import crypto from 'crypto'
 
 /**

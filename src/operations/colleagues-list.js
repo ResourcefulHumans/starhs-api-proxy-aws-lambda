@@ -3,7 +3,7 @@ import {Profile} from 'starhs-models'
 import {URIValue, URIValueType, EmailValue} from 'rheactor-value-objects'
 import Joi from 'joi'
 import {List, Link, JsonWebTokenType} from 'rheactor-models'
-import {joiErrorToHttpProblem} from '@resourcefulhumans/rheactor-aws-lambda'
+import {joiErrorToHttpProblem} from '../util'
 
 /**
  * @param {URIValue} mountURL
