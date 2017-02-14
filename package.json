@@ -44,6 +44,7 @@
     "tcomb": "^3.2.16"
   },
   "devDependencies": {
+    "@resourcefulhumans/update-lambda-environment-config": "^1.1.0",
     "babel-cli": "^6.22.2",
     "babel-eslint": "^7.1.1",
     "babel-preset-env": "^1.1.8",

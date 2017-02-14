@@ -40,7 +40,7 @@ update-env-vars: guard-NODE_ENV guard-VERSION
 	--function-name $(AWS__FUNCTION_NAME) \
 	--region $(AWS__REGION) \
 	--profile default \
-	| ./node_modules/.bin/babel-node ./util/update-lambda-environment-config.js
+	| ./node_modules/.bin/babel-node ./node_modules/.bin/update-lambda-environment-config
 
 delete: ## Deploy from AWS lambda
 	aws lambda delete-function --region $(AWS__REGION) --function-name $(AWS__FUNCTION_NAME)
