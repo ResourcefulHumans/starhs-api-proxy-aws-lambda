@@ -5,9 +5,8 @@ import {URIValue, URIValueType} from 'rheactor-value-objects'
 import {irreducible} from 'tcomb'
 import {StaRHsStatus, Profile} from 'starhs-models'
 import {Link, Model, JsonWebToken, JsonWebTokenType, HttpProblem} from 'rheactor-models'
-import {merge} from 'lodash'
 import {StatusCodeError} from 'request-promise/errors'
-import {joiErrorToHttpProblem} from '../api'
+import {joiErrorToHttpProblem} from '../util'
 
 const {key, user, password} = config.get('starhsapi')
 const $context = new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#LoginSuccess')
@@ -27,7 +26,7 @@ export class LoginSuccess extends Model {
    * @returns {{token: object, $links: Array<{href: string, $context: string}>, $context: string}}
    */
   toJSON () {
-    return merge(
+    return Object.assign(
       super.toJSON(),
       {
         token: this.token
@@ -40,7 +39,7 @@ export class LoginSuccess extends Model {
    * @returns {LoginSuccess}
    */
   static fromJSON (data) {
-    return new LoginSuccess(merge(super.fromJSON(data), {token: new JsonWebToken(data.token)}))
+    return new LoginSuccess(Object.assign(super.fromJSON(data), {token: new JsonWebToken(data.token)}))
   }
 
   /**
@@ -102,7 +101,7 @@ const login = (mountURL, apiClient, body) => {
  * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  */
-export function handler (mountURL, apiClient) {
+export const loginOperation = (mountURL, apiClient) => {
   URIValueType(mountURL)
   return {
     post: login.bind(null, mountURL.slashless(), apiClient)

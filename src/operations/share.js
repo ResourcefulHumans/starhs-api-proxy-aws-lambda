@@ -1,9 +1,9 @@
 import {JsonWebTokenType, HttpProblem} from 'rheactor-models'
 import {URIValue, URIValueType} from 'rheactor-value-objects'
-import staRHsStatusHandler from './starhs-status'
+import {staRHsStatusOperation} from './starhs-status'
 import {StaRHsAPIClientType} from '../apiclient'
 import Joi from 'joi'
-import {joiErrorToHttpProblem} from '../api'
+import {joiErrorToHttpProblem} from '../util'
 
 /**
  * @param {URIValue} mountURL
@@ -29,7 +29,7 @@ const share = (mountURL, apiClient, body, parts, token) => {
 
   const toId = v.value.to.replace(`${apiClient.endpoint}#profile:`, '')
 
-  return staRHsStatusHandler(apiClient).post({}, [token.sub], token)
+  return staRHsStatusOperation(apiClient).post({}, [token.sub], token)
     .then(
       /**
        * @param {StaRHsStatus} status
@@ -52,7 +52,7 @@ const share = (mountURL, apiClient, body, parts, token) => {
  * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  */
-export default function handler (mountURL, apiClient) {
+export const shareOperation = (mountURL, apiClient) => {
   URIValueType(mountURL)
   return {
     post: share.bind(null, mountURL.slashless(), apiClient)

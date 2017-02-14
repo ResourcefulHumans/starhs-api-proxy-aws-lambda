@@ -3,7 +3,7 @@
 import {expect} from 'chai'
 import {JsonWebToken, HttpProblem} from 'rheactor-models'
 import jwt from 'jsonwebtoken'
-import {handler as loginHandler, LoginSuccess} from '../../src/operations/login'
+import {loginOperation, LoginSuccess} from '../../src/operations/login'
 import {URIValue} from 'rheactor-value-objects'
 import {StaRHsStatus, Profile} from 'starhs-models'
 import {itShouldHaveLinkTo} from './helper'
@@ -18,7 +18,7 @@ describe('/login', () => {
       username: 'someuser',
       password: 'somepass'
     }
-    const login = loginHandler(
+    const login = loginOperation(
       mountURL,
       {
         loginWithUserId: (username, password) => {
@@ -46,7 +46,7 @@ describe('/login', () => {
       })
   })
   it('should throw an exception if required data is missing', () => {
-    const login = loginHandler(mountURL, {})
+    const login = loginOperation(mountURL, {})
     const scenarios = [
       [{}, 'ValidationError: child "username" fails because ["username" is required]'],
       [{username: 'foo'}, 'ValidationError: child "password" fails because ["password" is required]'],
@@ -66,7 +66,7 @@ describe('/login', () => {
     }
   })
   it('should throw an exception if extra data is passed', done => {
-    const login = loginHandler(mountURL, {})
+    const login = loginOperation(mountURL, {})
     login.post({username: 'foo', password: 'bar', extra: 'buzz'})
       .catch(err => {
         expect(err).to.be.instanceof(HttpProblem)
@@ -79,7 +79,7 @@ describe('/login', () => {
   })
   it('should handle staRHs backend error 500 on invalid credentials', done => {
     const msg = '{"Message":"Fehler","ExceptionMessage":"Login credentials wrong! Generation of Session failed","ExceptionType":"System.Exception","StackTrace":null}'
-    const login = loginHandler(mountURL, {
+    const login = loginOperation(mountURL, {
       loginWithUserId: () => Promise.try(() => {
         throw new StatusCodeError(
           500,

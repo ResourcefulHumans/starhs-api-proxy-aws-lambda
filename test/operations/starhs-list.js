@@ -2,7 +2,7 @@
 
 import {expect} from 'chai'
 import {generateToken} from './token'
-import staRHsListHandler from '../../src/operations/starhs-list'
+import {staRHsListOperation} from '../../src/operations/starhs-list'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {URIValue} from 'rheactor-value-objects'
@@ -64,7 +64,7 @@ describe('/staRHs/{user}/received', () => {
         'TotalReceived': 11
       })
     }
-    const list = staRHsListHandler(mountURL, mockClient)
+    const list = staRHsListOperation(mountURL, mockClient)
     return generateToken()
       .then(token => list.post({}, ['some-user-name', 'received'], token)
         .then(

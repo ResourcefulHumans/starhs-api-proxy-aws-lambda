@@ -37,6 +37,6 @@ const staRHsStatus = (apiClient, body, parts, token) => {
 /**
  * @param {StaRHsAPIClient} apiClient
  */
-export default (apiClient) => ({
+export const staRHsStatusOperation = (apiClient) => ({
   post: staRHsStatus.bind(null, apiClient)
 })

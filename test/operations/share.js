@@ -2,7 +2,7 @@
 
 import {expect} from 'chai'
 import {generateToken} from './token'
-import shareHandler from '../../src/operations/share'
+import {shareOperation} from '../../src/operations/share'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {URIValue} from 'rheactor-value-objects'
@@ -29,7 +29,7 @@ describe('/share', () => {
       expect(amount).to.equal(2)
       done()
     }
-    const share = shareHandler(mountURL, mockClient)
+    const share = shareOperation(mountURL, mockClient)
     generateToken()
       .then(token => share.post({
         to: 'https://services.digital-bauhaus.solutions/RH-API/V0.94#profile:some-user-id',

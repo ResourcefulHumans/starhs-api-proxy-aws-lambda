@@ -2,7 +2,7 @@
 
 import {expect} from 'chai'
 import {generateToken} from './token'
-import colleaguesListHandler from '../../src/operations/colleagues-list'
+import {colleagueListOperation} from '../../src/operations/colleagues-list'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {URIValue, EmailValue} from 'rheactor-value-objects'
@@ -66,7 +66,7 @@ describe('/colleagues/{user}', () => {
         }
       ])
     }
-    const list = colleaguesListHandler(mountURL, mockClient)
+    const list = colleagueListOperation(mountURL, mockClient)
     return generateToken()
       .then(token => list.post({}, ['some-user-name'], token)
         .then(

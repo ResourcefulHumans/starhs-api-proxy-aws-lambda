@@ -3,8 +3,7 @@ import {Profile} from 'starhs-models'
 import {URIValue, URIValueType, EmailValue} from 'rheactor-value-objects'
 import Joi from 'joi'
 import {List, Link, JsonWebTokenType} from 'rheactor-models'
-import {merge, trim} from 'lodash'
-import {joiErrorToHttpProblem} from '../api'
+import {joiErrorToHttpProblem} from '../util'
 
 /**
  * @param {URIValue} mountURL
@@ -23,7 +22,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   if (username !== token.sub) {
     return Promise.reject(new Error(`${username} is not you!`))
   }
-  const query = merge({}, qs)
+  const query = Object.assign({}, qs)
   const schema = Joi.object().keys({
     offset: Joi.number().min(0).default(0)
   })
@@ -58,7 +57,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
           colleagues.map(colleague => {
             return new Profile({
               $id: new URIValue(`${apiClient.endpoint}#profile:${colleague.PKUser}`),
-              email: new EmailValue(trim(colleague.EMail)),
+              email: new EmailValue(colleague.EMail.replace(/\s/g, '')),
               firstname: colleague.Forename,
               lastname: colleague.Name,
               avatar: colleague.URLPicture ? new URIValue(colleague.URLPicture) : undefined
@@ -76,7 +75,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
  * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  */
-export default (mountURL, apiClient) => {
+export const colleagueListOperation = (mountURL, apiClient) => {
   URIValueType(mountURL)
   return {
     post: list.bind(null, mountURL.slashless(), apiClient)

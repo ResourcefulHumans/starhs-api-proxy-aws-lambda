@@ -2,7 +2,7 @@
 
 import {expect} from 'chai'
 import {generateToken} from './token'
-import profileHandler from '../../src/operations/profile'
+import {profileOperation} from '../../src/operations/profile'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {URIValue} from 'rheactor-value-objects'
@@ -57,7 +57,7 @@ describe('/profile', () => {
         'FeatureName10': ''
       })
     }
-    const status = profileHandler(mountURL, mockClient)
+    const status = profileOperation(mountURL, mockClient)
     generateToken()
       .then(token => status.post({}, ['some-user-name'], token)
         .then(

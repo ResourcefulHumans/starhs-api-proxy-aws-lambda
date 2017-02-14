@@ -3,11 +3,10 @@ import {StaRH} from 'starhs-models'
 import {URIValue, URIValueType} from 'rheactor-value-objects'
 import {JsonWebTokenType, List, Link} from 'rheactor-models'
 import Joi from 'joi'
-import profileHandler from './profile'
-import staRHsStatusHandler from './starhs-status'
+import {profileOperation} from './profile'
+import {staRHsStatusOperation} from './starhs-status'
 import Promise from 'bluebird'
-import {merge} from 'lodash'
-import {joiErrorToHttpProblem} from '../api'
+import {joiErrorToHttpProblem} from '../util'
 import crypto from 'crypto'
 
 /**
@@ -27,7 +26,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   if (username !== token.sub) {
     return Promise.reject(new Error(`${username} is not you!`))
   }
-  const query = merge({}, qs)
+  const query = Object.assign({}, qs)
   query.which = parts[1]
   const schema = Joi.object().keys({
     which: Joi.string().trim().required().allow(['received', 'shared']),
@@ -43,8 +42,8 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   const opts = new QueryOptions({offset: v.value.offset ? new Date(v.value.offset) : undefined})
 
   return Promise.join(
-    profileHandler(mountURL, apiClient).post({}, [username], token),
-    staRHsStatusHandler(apiClient).post({}, [username], token),
+    profileOperation(mountURL, apiClient).post({}, [username], token),
+    staRHsStatusOperation(apiClient).post({}, [username], token),
     m.call(apiClient, token.payload.SessionToken, opts)
   )
     .spread(
@@ -111,7 +110,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
  * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  */
-export default (mountURL, apiClient) => {
+export const staRHsListOperation = (mountURL, apiClient) => {
   URIValueType(mountURL)
   return {
     post: list.bind(null, mountURL.slashless(), apiClient)
