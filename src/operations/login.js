@@ -7,7 +7,7 @@ import {StaRHsStatus, Profile} from 'starhs-models'
 import {Link, Model, JsonWebToken, JsonWebTokenType, HttpProblem} from 'rheactor-models'
 import {merge} from 'lodash'
 import {StatusCodeError} from 'request-promise/errors'
-import {joiErrorToHttpProblem} from '../api'
+import {joiErrorToHttpProblem} from '@resourcefulhumans/rheactor-aws-lambda'
 
 const {key, user, password} = config.get('starhsapi')
 const $context = new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#LoginSuccess')

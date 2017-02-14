@@ -7,7 +7,7 @@ import profileHandler from './profile'
 import staRHsStatusHandler from './starhs-status'
 import Promise from 'bluebird'
 import {merge} from 'lodash'
-import {joiErrorToHttpProblem} from '../api'
+import {joiErrorToHttpProblem} from '@resourcefulhumans/rheactor-aws-lambda'
 import crypto from 'crypto'
 
 /**

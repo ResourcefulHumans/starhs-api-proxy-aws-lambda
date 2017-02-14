@@ -4,7 +4,7 @@ import {URIValue, URIValueType, EmailValue} from 'rheactor-value-objects'
 import Joi from 'joi'
 import {List, Link, JsonWebTokenType} from 'rheactor-models'
 import {merge, trim} from 'lodash'
-import {joiErrorToHttpProblem} from '../api'
+import {joiErrorToHttpProblem} from '@resourcefulhumans/rheactor-aws-lambda'
 
 /**
  * @param {URIValue} mountURL
