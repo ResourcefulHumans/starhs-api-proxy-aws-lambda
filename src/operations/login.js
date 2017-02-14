@@ -5,7 +5,6 @@ import {URIValue, URIValueType} from 'rheactor-value-objects'
 import {irreducible} from 'tcomb'
 import {StaRHsStatus, Profile} from 'starhs-models'
 import {Link, Model, JsonWebToken, JsonWebTokenType, HttpProblem} from 'rheactor-models'
-import {merge} from 'lodash'
 import {StatusCodeError} from 'request-promise/errors'
 import {joiErrorToHttpProblem} from '@resourcefulhumans/rheactor-aws-lambda'
 
@@ -27,7 +26,7 @@ export class LoginSuccess extends Model {
    * @returns {{token: object, $links: Array<{href: string, $context: string}>, $context: string}}
    */
   toJSON () {
-    return merge(
+    return Object.assign(
       super.toJSON(),
       {
         token: this.token
@@ -40,7 +39,7 @@ export class LoginSuccess extends Model {
    * @returns {LoginSuccess}
    */
   static fromJSON (data) {
-    return new LoginSuccess(merge(super.fromJSON(data), {token: new JsonWebToken(data.token)}))
+    return new LoginSuccess(Object.assign(super.fromJSON(data), {token: new JsonWebToken(data.token)}))
   }
 
   /**

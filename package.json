@@ -28,12 +28,9 @@
   "dependencies": {
     "@resourcefulhumans/rheactor-aws-lambda": "^1.0.1",
     "@resourcefulhumans/rheactor-errors": "1.x",
-    "aws-sdk": "^2.9.0",
     "bluebird": "^3.4.7",
-    "glob": "^7.1.1",
     "joi": "^10.2.1",
     "jsonwebtoken": "^7.2.1",
-    "lodash": "^4.17.4",
     "moment": "^2.17.1",
     "nconf": "^0.8.4",
     "request": "^2.79.0",

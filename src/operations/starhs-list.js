@@ -6,7 +6,6 @@ import Joi from 'joi'
 import {profileOperation} from './profile'
 import {staRHsStatusOperation} from './starhs-status'
 import Promise from 'bluebird'
-import {merge} from 'lodash'
 import {joiErrorToHttpProblem} from '@resourcefulhumans/rheactor-aws-lambda'
 import crypto from 'crypto'
 
@@ -27,7 +26,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   if (username !== token.sub) {
     return Promise.reject(new Error(`${username} is not you!`))
   }
-  const query = merge({}, qs)
+  const query = Object.assign({}, qs)
   query.which = parts[1]
   const schema = Joi.object().keys({
     which: Joi.string().trim().required().allow(['received', 'shared']),

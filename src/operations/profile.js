@@ -2,7 +2,6 @@ import {StaRHsAPIClientType} from '../apiclient'
 import {Profile, StaRH} from 'starhs-models'
 import {JsonWebTokenType, Link} from 'rheactor-models'
 import {EmailValue, URIValue, URIValueType} from 'rheactor-value-objects'
-import {trim} from 'lodash'
 
 /**
  * @param {URIValue} mountURL
@@ -28,7 +27,7 @@ const profile = (mountURL, apiClient, body, parts, token) => {
       response => {
         const profile = new Profile({
           $id: new URIValue(`${apiClient.endpoint}#profile:${response.PKUser}`),
-          email: new EmailValue(trim(response.EMail)),
+          email: new EmailValue(response.EMail.replace(/\s/, '')),
           firstname: response.Forename,
           lastname: response.Name,
           organization: response.Kunde1,
