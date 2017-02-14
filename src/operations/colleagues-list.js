@@ -76,7 +76,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
  * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  */
-export default (mountURL, apiClient) => {
+export const colleagueListOperation = (mountURL, apiClient) => {
   URIValueType(mountURL)
   return {
     post: list.bind(null, mountURL.slashless(), apiClient)

@@ -3,8 +3,8 @@ import {StaRH} from 'starhs-models'
 import {URIValue, URIValueType} from 'rheactor-value-objects'
 import {JsonWebTokenType, List, Link} from 'rheactor-models'
 import Joi from 'joi'
-import profileHandler from './profile'
-import staRHsStatusHandler from './starhs-status'
+import {profileOperation} from './profile'
+import {staRHsStatusOperation} from './starhs-status'
 import Promise from 'bluebird'
 import {merge} from 'lodash'
 import {joiErrorToHttpProblem} from '@resourcefulhumans/rheactor-aws-lambda'
@@ -43,8 +43,8 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   const opts = new QueryOptions({offset: v.value.offset ? new Date(v.value.offset) : undefined})
 
   return Promise.join(
-    profileHandler(mountURL, apiClient).post({}, [username], token),
-    staRHsStatusHandler(apiClient).post({}, [username], token),
+    profileOperation(mountURL, apiClient).post({}, [username], token),
+    staRHsStatusOperation(apiClient).post({}, [username], token),
     m.call(apiClient, token.payload.SessionToken, opts)
   )
     .spread(
@@ -111,7 +111,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
  * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  */
-export default (mountURL, apiClient) => {
+export const staRHsListOperation = (mountURL, apiClient) => {
   URIValueType(mountURL)
   return {
     post: list.bind(null, mountURL.slashless(), apiClient)

@@ -47,7 +47,7 @@ const profile = (mountURL, apiClient, body, parts, token) => {
  * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  */
-export default (mountURL, apiClient) => {
+export const profileOperation = (mountURL, apiClient) => {
   URIValueType(mountURL)
   return {
     post: profile.bind(null, mountURL.slashless(), apiClient)

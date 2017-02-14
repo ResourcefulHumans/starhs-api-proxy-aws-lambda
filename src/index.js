@@ -1,12 +1,12 @@
 import {StaRHsAPIClient} from './apiclient'
 import config from './config'
 import {handler, apiIndexOperation, statusOperation} from '@resourcefulhumans/rheactor-aws-lambda'
-import {handler as loginHandler} from './operations/login'
-import staRHsStatusHandler from './operations/starhs-status'
-import profileHandler from './operations/profile'
-import staRHsListHandler from './operations/starhs-list'
-import colleaguesListHandler from './operations/colleagues-list'
-import shareHandler from './operations/share'
+import {loginOperation} from './operations/login'
+import {staRHsStatusOperation} from './operations/starhs-status'
+import {profileOperation} from './operations/profile'
+import {staRHsListOperation} from './operations/starhs-list'
+import {colleagueListOperation} from './operations/colleagues-list'
+import {shareOperation} from './operations/share'
 import {JsonWebToken, Status} from 'rheactor-models'
 import {URIValue} from 'rheactor-value-objects'
 
@@ -23,12 +23,12 @@ const operations = {
     'status': Status.$context,
     'login': JsonWebToken.$context
   }),
-  login: loginHandler(mountURL, apiClient),
-  staRHsStatus: staRHsStatusHandler(apiClient),
-  staRHs: staRHsListHandler(mountURL, apiClient),
-  share: shareHandler(mountURL, apiClient),
-  profile: profileHandler(mountURL, apiClient),
-  colleagues: colleaguesListHandler(mountURL, apiClient),
+  login: loginOperation(mountURL, apiClient),
+  staRHsStatus: staRHsStatusOperation(apiClient),
+  staRHs: staRHsListOperation(mountURL, apiClient),
+  share: shareOperation(mountURL, apiClient),
+  profile: profileOperation(mountURL, apiClient),
+  colleagues: colleagueListOperation(mountURL, apiClient),
   status: statusOperation(version, environment, deployTime)
 }
 

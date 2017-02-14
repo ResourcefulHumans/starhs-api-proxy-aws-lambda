@@ -102,7 +102,7 @@ const login = (mountURL, apiClient, body) => {
  * @param {URIValue} mountURL
  * @param {StaRHsAPIClient} apiClient
  */
-export function handler (mountURL, apiClient) {
+export const loginOperation = (mountURL, apiClient) => {
   URIValueType(mountURL)
   return {
     post: login.bind(null, mountURL.slashless(), apiClient)

@@ -1,7 +1,7 @@
 /* global describe, it */
 
 import {expect} from 'chai'
-import staRHsStatusHandler from '../../src/operations/starhs-status'
+import {staRHsStatusOperation} from '../../src/operations/starhs-status'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {StaRHsStatusType} from 'starhs-models'
@@ -33,7 +33,7 @@ describe('/staRHsStatus', () => {
         'ShowStarMap': false
       })
     }
-    const status = staRHsStatusHandler(mockClient)
+    const status = staRHsStatusOperation(mockClient)
     generateToken()
       .then(token => status.post({}, ['some-user-name'], token)
         .then(
