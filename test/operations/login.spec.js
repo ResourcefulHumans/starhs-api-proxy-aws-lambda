@@ -9,6 +9,7 @@ import {StaRHsStatus, Profile} from 'starhs-models'
 import {itShouldHaveLinkTo} from './helper'
 import {StatusCodeError} from 'request-promise/errors'
 import Promise from 'bluebird'
+import {StaRHsAPIClient} from '../../src/apiclient'
 
 const mountURL = new URIValue('https://api.example.com/')
 
@@ -18,18 +19,16 @@ describe('/login', () => {
       username: 'someuser',
       password: 'somepass'
     }
-    const login = loginOperation(
-      mountURL,
-      {
-        loginWithUserId: (username, password) => {
-          expect(username).to.equal(body.username)
-          expect(password).to.equal(body.password)
-          return Promise.resolve({
-            SessionToken: 'abc'
-          })
-        }
-      }
-    )
+
+    const mockClient = new StaRHsAPIClient('myapikey', 'apiuser', 'apipass')
+    mockClient.loginWithUserId = (username, password) => {
+      expect(username).to.equal(body.username)
+      expect(password).to.equal(body.password)
+      return Promise.resolve({
+        SessionToken: 'abc'
+      })
+    }
+    const login = loginOperation(mountURL, mockClient)
     return login.post(body)
       .then(success => {
         expect(success).to.be.instanceof(LoginSuccess)
@@ -46,7 +45,8 @@ describe('/login', () => {
       })
   })
   it('should throw an exception if required data is missing', () => {
-    const login = loginOperation(mountURL, {})
+    const mockClient = new StaRHsAPIClient('myapikey', 'apiuser', 'apipass')
+    const login = loginOperation(mountURL, mockClient)
     const scenarios = [
       [{}, 'ValidationError: child "username" fails because ["username" is required]'],
       [{username: 'foo'}, 'ValidationError: child "password" fails because ["password" is required]'],
@@ -66,7 +66,8 @@ describe('/login', () => {
     }
   })
   it('should throw an exception if extra data is passed', done => {
-    const login = loginOperation(mountURL, {})
+    const mockClient = new StaRHsAPIClient('myapikey', 'apiuser', 'apipass')
+    const login = loginOperation(mountURL, mockClient)
     login.post({username: 'foo', password: 'bar', extra: 'buzz'})
       .catch(err => {
         expect(err).to.be.instanceof(HttpProblem)
@@ -79,14 +80,14 @@ describe('/login', () => {
   })
   it('should handle staRHs backend error 500 on invalid credentials', done => {
     const msg = '{"Message":"Fehler","ExceptionMessage":"Login credentials wrong! Generation of Session failed","ExceptionType":"System.Exception","StackTrace":null}'
-    const login = loginOperation(mountURL, {
-      loginWithUserId: () => Promise.try(() => {
-        throw new StatusCodeError(
-          500,
-          JSON.parse(msg)
-        )
-      })
+    const mockClient = new StaRHsAPIClient('myapikey', 'apiuser', 'apipass')
+    mockClient.loginWithUserId = (username, password) => Promise.try(() => {
+      throw new StatusCodeError(
+        500,
+        JSON.parse(msg)
+      )
     })
+    const login = loginOperation(mountURL, mockClient)
     login.post({username: 'foo', password: 'bar'})
       .catch(err => {
         expect(err).to.be.instanceof(HttpProblem)
