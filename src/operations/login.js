@@ -2,6 +2,7 @@ import Joi from 'joi'
 import jwt from 'jsonwebtoken'
 import config from '../config'
 import {URIValue, URIValueType} from 'rheactor-value-objects'
+import {StaRHsAPIClientType} from '../apiclient'
 import {irreducible} from 'tcomb'
 import {StaRHsStatus, Profile} from 'starhs-models'
 import {Link, Model, JsonWebToken, JsonWebTokenType, HttpProblem} from 'rheactor-models'
@@ -60,6 +61,7 @@ export const LoginSuccessType = irreducible('LoginSuccessType', (x) => x instanc
  */
 const login = (mountURL, apiClient, body) => {
   URIValueType(mountURL)
+  StaRHsAPIClientType(apiClient)
   const schema = Joi.object().keys({
     username: Joi.string().trim().required(),
     password: Joi.string().required().trim()
