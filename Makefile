@@ -32,18 +32,24 @@ update-lambda-env: guard-NODE_ENV guard-VERSION ## Update the lambda environment
 	aws lambda update-function-configuration \
 	--function-name $(AWS__FUNCTION_NAME) \
 	--region $(AWS__REGION) \
-	--profile default \
-	--environment "Variables={$(shell make update-env-vars)}"
+	--environment "Variables={$(shell make -s update-env-vars)}"
 
 update-env-vars: guard-NODE_ENV guard-VERSION
 	@aws lambda get-function-configuration \
 	--function-name $(AWS__FUNCTION_NAME) \
 	--region $(AWS__REGION) \
-	--profile default \
 	| ./node_modules/.bin/babel-node ./node_modules/.bin/update-lambda-environment-config
 
 delete: ## Deploy from AWS lambda
 	aws lambda delete-function --region $(AWS__REGION) --function-name $(AWS__FUNCTION_NAME)
+
+update: guard-NODE_ENV guard-VERSION ## Update the lambda
+ifeq "${VERSION}" "0.0.0-development"
+	@echo "Not deploying $(VERSION)!"
+else
+	make update-lambda-function
+	NODE_ENV=$(NODE_ENV) VERSION=$(VERSION) make update-lambda-env
+endif
 
 # Helpers
 
