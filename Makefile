@@ -3,6 +3,8 @@
 
 AWS__REGION ?= "eu-central-1"
 AWS__FUNCTION_NAME ?= "staRHsAPIproxy"
+NODE_ENV ?= "production"
+VERSION ?= $(shell /usr/bin/env node -e "console.log(require('./package.json').version);")
 
 archive.zip: src/*.js src/**/*.js package.json
 	rm -f $@
