@@ -13,7 +13,7 @@ import {URIValue} from 'rheactor-value-objects'
 const {key, user, password} = config.get('starhsapi')
 const apiClient = new StaRHsAPIClient(key, user, password)
 const mountURL = new URIValue(config.get('mount_url'))
-const contentType = 'application/vnd.resourceful-humans.rheactor-aws-lambda.v1+json'
+const contentType = 'application/vnd.resourceful-humans.starhs.v1+json'
 const tokenSecret = `${key}.${user}.${password}`
 const version = config.get('version')
 const environment = config.get('environment')

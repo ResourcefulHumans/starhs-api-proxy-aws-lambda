@@ -18,7 +18,6 @@ nconf
 
 nconf.defaults({
   'environment': process.env.NODE_ENV,
-  'mime_type': 'application/vnd.resourceful-humans.starhs.v1+json',
   'mount_url': 'https://api.example.com/',
   'starhsapi': {
     'key': 'myapikey',
