@@ -6,6 +6,7 @@ import {staRHsStatusOperation} from './operations/starhs-status'
 import {profileOperation} from './operations/profile'
 import {staRHsListOperation} from './operations/starhs-list'
 import {colleagueListOperation} from './operations/colleagues-list'
+import {newPasswordOperation} from './operations/new-password'
 import {shareOperation} from './operations/share'
 import {JsonWebToken, Status} from 'rheactor-models'
 import {URIValue} from 'rheactor-value-objects'
@@ -29,7 +30,8 @@ const operations = {
   share: shareOperation(mountURL, apiClient),
   profile: profileOperation(mountURL, apiClient),
   colleagues: colleagueListOperation(mountURL, apiClient),
-  status: statusOperation(version, environment, deployTime)
+  status: statusOperation(version, environment, deployTime),
+  newPassword: newPasswordOperation(apiClient)
 }
 
 export const handler = awsLambdaHandler.bind(null, contentType, environment, tokenSecret, operations)
