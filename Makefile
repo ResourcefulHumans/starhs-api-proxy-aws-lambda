@@ -45,12 +45,17 @@ update-env-vars: guard-NODE_ENV guard-VERSION
 delete: ## Deploy from AWS lambda
 	aws lambda delete-function --region $(AWS__REGION) --function-name $(AWS__FUNCTION_NAME)
 
+TRAVIS_REPO_SLUG ?= "ResourcefulHumans/accenture-configurator-backend"
+
 update: guard-NODE_ENV guard-VERSION ## Update the lambda
 ifeq "${VERSION}" "0.0.0-development"
 	@echo "Not deploying $(VERSION)!"
 else
 	make update-lambda-function
 	NODE_ENV=$(NODE_ENV) VERSION=$(VERSION) make update-lambda-env
+	@if [ "${SLACK_DEPLOY_WEBHOOK}" != "" ]; then \
+		curl -X POST --data-urlencode 'payload={"text": "version *${VERSION}* of <https://github.com/${TRAVIS_REPO_SLUG}|${TRAVIS_REPO_SLUG}> has been deployed."}' ${SLACK_DEPLOY_WEBHOOK}; \
+	fi
 endif
 
 # Helpers

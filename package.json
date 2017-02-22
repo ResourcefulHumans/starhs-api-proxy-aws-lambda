@@ -1,6 +1,7 @@
 {
   "name": "starhs-api-proxy-aws-lambda",
   "description": "A proxy for the staRHs API running on AWS lambda",
+  "version": "0.0.0-development",
   "scripts": {
     "test": "NODE_ENV=testing VERSION=0.0.0 mocha --compilers js:babel-register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js",
     "test:coverage": "NODE_ENV=testing istanbul cover _mocha -- --compilers js:babel-core/register --reporter=dot --timeout=1350 test/\\*\\*/\\*.js",
