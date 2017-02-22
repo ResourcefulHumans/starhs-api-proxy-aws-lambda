@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#readme",
   "dependencies": {
-    "@resourcefulhumans/rheactor-aws-lambda": "^2.2.0",
+    "@resourcefulhumans/rheactor-aws-lambda": "^3.0.0",
     "@resourcefulhumans/rheactor-errors": "1.x",
     "bluebird": "^3.4.7",
     "joi": "^10.2.1",
