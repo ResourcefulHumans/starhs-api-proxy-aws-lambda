@@ -57,9 +57,9 @@ describe('/profile', () => {
         'FeatureName10': ''
       })
     }
-    const status = profileOperation(mountURL, mockClient)
+    const op = profileOperation(mountURL, mockClient)
     generateToken()
-      .then(token => status.post({}, ['some-user-name'], token)
+      .then(token => op.post({}, ['some-user-name'], token)
         .then(
           /**
            * @param {Profile} status

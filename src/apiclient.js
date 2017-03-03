@@ -113,6 +113,19 @@ export class StaRHsAPIClient {
       })
   }
 
+  updateProfile (sessionToken, profile) {
+    StringType(sessionToken)
+    return rp(
+      {
+        method: 'POST',
+        uri: this.endpoint.slashless().toString() + '/profile/set-Profile',
+        headers: {
+          'SessionToken': sessionToken
+        },
+        qs: profile
+      })
+  }
+
   /**
    * @link http://resourcefulhumans.github.io/staRHs-api/#starhs_get_StarhsStatus_get
    * @param {String} sessionToken
