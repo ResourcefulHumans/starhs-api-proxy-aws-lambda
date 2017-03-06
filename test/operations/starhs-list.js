@@ -43,7 +43,7 @@ describe('/staRHs/{user}/received', () => {
         }
       ])
     }
-    mockClient.getProfile = (sessionToken) => {
+    mockClient.getProfile = sessionToken => {
       expect(sessionToken).to.equal('some-session-token')
       return Promise.resolve({
         'PKUser': 'profile-id-antarctica',
@@ -53,7 +53,7 @@ describe('/staRHs/{user}/received', () => {
         'URLPicture': 'http://starhs.net/profileimgs/'
       })
     }
-    mockClient.getStaRHsStatus = (sessionToken) => {
+    mockClient.getStaRHsStatus = sessionToken => {
       expect(sessionToken).to.equal('some-session-token')
       return Promise.resolve({
         'CycleStaRHsToShare': 10,

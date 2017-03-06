@@ -11,7 +11,7 @@ import {URIValue} from 'rheactor-value-objects'
 describe('/staRHsStatus', () => {
   it('should return status', () => {
     const mockClient = new StaRHsAPIClient('myapikey', 'apiuser', 'apipass')
-    mockClient.getStaRHsStatus = (sessionToken) => {
+    mockClient.getStaRHsStatus = sessionToken => {
       expect(sessionToken).to.equal('some-session-token')
       return Promise.resolve({
         'PKUser': '9d1ecf8d-996e-4e5a-99e7-1a751157903a',

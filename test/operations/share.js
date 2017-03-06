@@ -11,7 +11,7 @@ const mountURL = new URIValue('https://api.example.com/')
 describe('/share', () => {
   it('should share a staRH', done => {
     const mockClient = new StaRHsAPIClient('myapikey', 'apiuser', 'apipass')
-    mockClient.getStaRHsStatus = (sessionToken) => {
+    mockClient.getStaRHsStatus = sessionToken => {
       expect(sessionToken).to.equal('some-session-token')
       return Promise.resolve({
         'CycleStaRHsToShare': 10,
