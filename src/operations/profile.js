@@ -16,6 +16,7 @@ export const transformProfile = (apiClient, mountURL, username, response) => {
   profile.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'received'].join('/')), StaRH.$context, true, 'received-staRHs'))
   profile.$links.push(new Link(new URIValue([mountURL.toString(), 'colleagues', username].join('/')), Profile.$context, true, 'colleagues'))
   profile.$links.push(new Link(new URIValue([mountURL.toString(), 'profileUpdate', username].join('/')), Profile.$context, false, 'update-profile'))
+  profile.$links.push(new Link(new URIValue([mountURL.toString(), 'avatarUpdate', username].join('/')), Profile.$context, false, 'update-avatar'))
   profile.$links.push(new Link(new URIValue([mountURL.toString(), 'share'].join('/')), StaRH.$context, false, 'share-staRH'))
   return profile
 }

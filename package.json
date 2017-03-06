@@ -39,7 +39,8 @@
     "rheactor-models": "3.x >=3.2.2",
     "rheactor-value-objects": "^10.0.0",
     "starhs-models": "8.x",
-    "tcomb": "^3.2.16"
+    "tcomb": "^3.2.16",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "@resourcefulhumans/update-lambda-environment-config": "^1.1.0",

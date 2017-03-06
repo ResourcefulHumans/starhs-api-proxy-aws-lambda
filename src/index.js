@@ -5,6 +5,7 @@ import {loginOperation} from './operations/login'
 import {staRHsStatusOperation} from './operations/starhs-status'
 import {profileOperation} from './operations/profile'
 import {profileUpdateOperation} from './operations/profile-update'
+import {avatarUpdateOperation} from './operations/avatar-update'
 import {staRHsListOperation} from './operations/starhs-list'
 import {colleagueListOperation} from './operations/colleagues-list'
 import {newPasswordOperation} from './operations/new-password'
@@ -32,6 +33,7 @@ const operations = {
   share: shareOperation(mountURL, apiClient),
   profile: profileOperation(mountURL, apiClient),
   profileUpdate: profileUpdateOperation(mountURL, apiClient),
+  avatarUpdate: avatarUpdateOperation(mountURL, apiClient),
   colleagues: colleagueListOperation(mountURL, apiClient),
   status: statusOperation(version, environment, deployTime),
   newPassword: newPasswordOperation(apiClient)

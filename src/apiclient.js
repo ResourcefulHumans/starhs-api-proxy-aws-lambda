@@ -1,7 +1,13 @@
+/* global Buffer */
+
 import rp from 'request-promise'
 import moment from 'moment'
 import {String as StringType, Date as DateType, Number as NumberType, irreducible, maybe, refinement} from 'tcomb'
 import {URIValue, URIValueType} from 'rheactor-value-objects'
+import fs from 'fs'
+import Promise from 'bluebird'
+Promise.promisifyAll(fs)
+import {v4} from 'uuid'
 
 const PositiveIntegerType = refinement(NumberType, n => n > 0 && n % 1 === 0, 'PositiveIntegerType')
 
@@ -124,6 +130,29 @@ export class StaRHsAPIClient {
         },
         qs: profile
       })
+  }
+
+  /**
+   * NOTE: request-promise requires the file to a file read stream, that is why the file is first stored on disc.
+   * NOTE: /tmp is hardcoded, because fs.mkdtemp is not available on Lambda
+   *
+   * @param {String} sessionToken
+   * @param {String} pictureData binary data
+   * @return Promise<Object>
+   */
+  updateAvatar (sessionToken, pictureData) {
+    StringType(sessionToken)
+    let tmpFile = `/tmp/avatar-upload-${v4()}`
+    return fs.writeFileAsync(tmpFile, pictureData, 'binary')
+      .then(() => rp(
+        {
+          method: 'POST',
+          uri: this.endpoint.slashless().toString() + '/profile/set-ProfilePicture',
+          headers: {
+            'SessionToken': sessionToken
+          },
+          body: fs.createReadStream(tmpFile)
+        }))
   }
 
   /**
@@ -310,30 +339,6 @@ export class StaRHsAPIClient {
           json: true
         })
       })
-  }
-
-  /**
-   * Sets a new profile picture
-   *
-   * @link http://resourcefulhumans.github.io/staRHs-api/#profile_set_ProfilePicture_post
-   * @param {String} userId
-   * @return Promise<Object>
-   */
-  setProfilePicture (sessionToken, imageData) {
-    StringType(sessionToken)
-    StringType(imageData)
-    const self = this
-    const imageDataBuffer = new Buffer(imageData)
-    return rp({
-      method: 'POST',
-      uri: self.endpoint.slashless().toString() + '/profile/set-ProfilePicture',
-      headers: {
-        'SessionToken': sessionToken
-      },
-      form: {
-        Picture: imageDataBuffer.toString('base64')
-      }
-    })
   }
 }
 
