@@ -56,7 +56,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
         return new List(
           colleagues.map(colleague => {
             return new Profile({
-              $id: new URIValue(`${apiClient.endpoint}#profile:${colleague.PKUser}`),
+              $id: new URIValue(`${mountURL}/profile/${colleague.PKUser}`),
               email: new EmailValue(colleague.EMail.replace(/\s/g, '')),
               firstname: colleague.Forename,
               lastname: colleague.Name,

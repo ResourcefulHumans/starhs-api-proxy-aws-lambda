@@ -77,12 +77,12 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
             const amount = starh.No
             const message = starh.Reason
             const to = received ? p : {
-              $id: new URIValue(`${apiClient.endpoint}#profile:${starh.ToID}`),
+              $id: new URIValue(`${mountURL}/profile/${starh.ToID}`),
               name: starh.To,
               avatar: starh.ToURLPicture ? new URIValue(starh.ToURLPicture) : undefined
             }
             const from = received ? {
-              $id: new URIValue(`${apiClient.endpoint}#profile:${starh.FromID}`),
+              $id: new URIValue(`${mountURL}/profile/${starh.FromID}`),
               name: starh.From,
               avatar: starh.FromURLPicture ? new URIValue(starh.FromURLPicture) : undefined
             } : p
@@ -90,7 +90,7 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
             const they = received ? starh.FromID : starh.ToID
             const staRHhash = crypto.createHash('sha256').update(`${username}-${they}-${starh.Date}-${starh.Reason}`).digest('hex')
             return new StaRH({
-              $id: new URIValue(`${apiClient.endpoint}#staRH:${staRHhash}`),
+              $id: new URIValue(`${mountURL}/staRH/${staRHhash}`),
               from,
               to,
               amount,

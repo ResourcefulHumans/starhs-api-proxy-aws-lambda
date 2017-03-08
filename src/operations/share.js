@@ -27,7 +27,7 @@ const share = (mountURL, apiClient, body, parts, token) => {
     return Promise.reject(joiErrorToHttpProblem(v.error))
   }
 
-  const toId = v.value.to.replace(`${apiClient.endpoint}#profile:`, '')
+  const toId = v.value.to.replace(`${mountURL}/profile/`, '')
 
   return staRHsStatusOperation(apiClient).post({}, [token.sub], token)
     .then(

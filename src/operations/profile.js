@@ -5,7 +5,7 @@ import {EmailValue, URIValue, URIValueType} from 'rheactor-value-objects'
 
 export const transformProfile = (apiClient, mountURL, username, response) => {
   const profile = new Profile({
-    $id: new URIValue(`${apiClient.endpoint}#profile:${response.PKUser}`),
+    $id: new URIValue(`${mountURL}/profile/${response.PKUser}`),
     email: new EmailValue(response.EMail.replace(/\s/g, '')),
     firstname: response.Forename,
     lastname: response.Name,

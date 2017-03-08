@@ -9,7 +9,7 @@ import {URIValue} from 'rheactor-value-objects'
 import {StaRH} from 'starhs-models'
 import {ListType} from 'rheactor-models'
 import {itShouldHaveLinkTo} from './helper'
-const mountURL = new URIValue('https://api.example.com/')
+const mountURL = new URIValue('https://api.example.com')
 
 describe('/staRHs/{user}/received', () => {
   it('should return the received staRHs', () => {
@@ -83,10 +83,10 @@ describe('/staRHs/{user}/received', () => {
             expect(list.items[0].amount).to.equal(2)
             expect(list.items[0].message).to.equal('staRH message 1')
             expect(list.items[0].$createdAt.toISOString()).to.equal(new Date('2016-12-13T15:16:00').toISOString())
-            expect(list.items[0].to.$id.equals(new URIValue('https://services.digital-bauhaus.solutions/RH-API/V0.94#profile:profile-id-antarctica'))).to.equal(true)
+            expect(list.items[0].to.$id.equals(new URIValue(`${mountURL}/profile/profile-id-antarctica`))).to.equal(true)
             expect(list.items[0].to.name).to.equal('Antarctica')
             expect(list.items[0].to.avatar.equals(new URIValue('http://starhs.net/profileimgs/'))).to.equal(true)
-            expect(list.items[0].from.$id.equals(new URIValue('https://services.digital-bauhaus.solutions/RH-API/V0.94#profile:1a1d56af-a34e-47e9-b590-309da51f60cc'))).to.equal(true)
+            expect(list.items[0].from.$id.equals(new URIValue(`${mountURL}/profile/1a1d56af-a34e-47e9-b590-309da51f60cc`))).to.equal(true)
             expect(list.items[0].from.name).to.equal('Peter Gamelkoorn')
             expect(list.items[0].from.avatar.equals(new URIValue('https://starhs.net/profileimgs/20c67c72-7c45-4de0-91e3-c2ac11c40b95.jpg'))).to.equal(true)
           }

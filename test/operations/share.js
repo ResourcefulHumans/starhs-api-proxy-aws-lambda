@@ -6,7 +6,7 @@ import {shareOperation} from '../../src/operations/share'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {URIValue} from 'rheactor-value-objects'
-const mountURL = new URIValue('https://api.example.com/')
+const mountURL = new URIValue('https://api.example.com')
 
 describe('/share', () => {
   it('should share a staRH', done => {
@@ -32,7 +32,7 @@ describe('/share', () => {
     const share = shareOperation(mountURL, mockClient)
     generateToken()
       .then(token => share.post({
-        to: 'https://services.digital-bauhaus.solutions/RH-API/V0.94#profile:some-user-id',
+        to: `${mountURL}/profile/some-user-id`,
         message: 'a staRH for you',
         amount: 2
       }, [], token))
