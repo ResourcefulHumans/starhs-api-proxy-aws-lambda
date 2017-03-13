@@ -33,9 +33,6 @@ const profile = (mountURL, apiClient, body, parts, token) => {
   StaRHsAPIClientType(apiClient)
   JsonWebTokenType(token)
   const username = parts[0]
-  if (username !== token.sub) {
-    return Promise.reject(new Error(`${username} is not you!`))
-  }
   return apiClient.getProfile(token.payload.SessionToken)
     .then(
       /**

@@ -17,10 +17,6 @@ import {joiErrorToHttpProblem} from '../util'
 const avatarUpdate = (mountURL, apiClient, body, parts, token) => {
   StaRHsAPIClientType(apiClient)
   JsonWebTokenType(token)
-  const username = parts[0]
-  if (username !== token.sub) {
-    return Promise.reject(new Error(`${username} is not you!`))
-  }
   const schema = Joi.object().keys({
     file: Joi.string().required()
   })

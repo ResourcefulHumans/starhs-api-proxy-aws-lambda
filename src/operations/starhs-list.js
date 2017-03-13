@@ -23,9 +23,6 @@ const list = (mountURL, apiClient, body, parts, token, qs) => {
   StaRHsAPIClientType(apiClient)
   JsonWebTokenType(token)
   const username = parts[0]
-  if (username !== token.sub) {
-    return Promise.reject(new Error(`${username} is not you!`))
-  }
   const query = Object.assign({}, qs)
   query.which = parts[1]
   const schema = Joi.object().keys({
