@@ -38,7 +38,7 @@
     "request-promise": "^4.1.1",
     "rheactor-models": "^3.7.0",
     "rheactor-value-objects": "^10.0.0",
-    "starhs-models": "8.x",
+    "starhs-models": "^8.1.0",
     "tcomb": "^3.2.20",
     "uuid": "^3.0.1"
   },

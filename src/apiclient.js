@@ -340,6 +340,33 @@ export class StaRHsAPIClient {
         })
       })
   }
+
+  /**
+   * @link http://resourcefulhumans.github.io/staRHs-api/#map_get_MapDataWithSession_get
+   * @param {String} sessionToken
+   * @param {Date} start
+   * @param {Date} end
+   * @return Promise<Object>
+   */
+  staRHmap (sessionToken, start, end) {
+    StringType(sessionToken)
+    DateType(start)
+    DateType(end)
+    const self = this
+    return rp(
+      {
+        method: 'GET',
+        uri: self.endpoint.slashless().toString() + '/map/get-MapDataWithSession',
+        headers: {
+          'SessionToken': sessionToken
+        },
+        qs: {
+          datefrom: start.toISOString().substr(0, 10),
+          dateto: end.toISOString().substr(0, 10)
+        },
+        json: true
+      })
+  }
 }
 
 export const StaRHsAPIClientType = irreducible('StaRHsAPIClientType', (x) => x instanceof StaRHsAPIClient)

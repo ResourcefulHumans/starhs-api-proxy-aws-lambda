@@ -10,7 +10,9 @@ import {staRHsListOperation} from './operations/starhs-list'
 import {colleagueListOperation} from './operations/colleagues-list'
 import {newPasswordOperation} from './operations/new-password'
 import {shareOperation} from './operations/share'
+import {staRHmapOperation} from './operations/starh-map'
 import {JsonWebToken, Status, Link, Index, User} from 'rheactor-models'
+import {StaRHmap} from 'starhs-models'
 import {URIValue} from 'rheactor-value-objects'
 
 const {key, user, password} = config.get('starhsapi')
@@ -25,7 +27,8 @@ const operations = {
   index: apiIndexOperation(new Index([
     new Link(mountURL.slashless().append('/status'), Status.$context),
     new Link(mountURL.slashless().append('/login'), JsonWebToken.$context),
-    new Link(mountURL.slashless().append('/newPassword'), User.$context, false, 'newPassword')
+    new Link(mountURL.slashless().append('/newPassword'), User.$context, false, 'newPassword'),
+    new Link(mountURL.slashless().append('/staRHmap'), StaRHmap.$context)
   ])),
   login: loginOperation(mountURL, apiClient),
   staRHsStatus: staRHsStatusOperation(apiClient),
@@ -36,7 +39,8 @@ const operations = {
   avatarUpdate: avatarUpdateOperation(mountURL, apiClient),
   colleagues: colleagueListOperation(mountURL, apiClient),
   status: statusOperation(version, environment, deployTime),
-  newPassword: newPasswordOperation(apiClient)
+  newPassword: newPasswordOperation(apiClient),
+  staRHmap: staRHmapOperation(apiClient)
 }
 
 export const handler = awsLambdaHandler.bind(null, contentType, environment, tokenSecret, operations)

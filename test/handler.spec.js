@@ -5,6 +5,7 @@ import {handler} from '../src'
 const contentType = 'application/vnd.resourceful-humans.starhs.v1+json'
 const headers = {'Content-type': contentType}
 import {Index, Status, User} from 'rheactor-models'
+import {StaRHmap} from 'starhs-models'
 
 describe('handler', () => {
   describe('/index', () => {
@@ -18,9 +19,10 @@ describe('handler', () => {
         expect(res.statusCode).to.equal(200)
         expect(res.headers['Content-Type']).to.equal(contentType)
         const index = Index.fromJSON(JSON.parse(res.body))
-        expect(index.$links.length, 'Index should have 3 links').to.equal(3)
+        expect(index.$links.length, 'Index should have 4 links').to.equal(4)
         expect(index.$links.filter(({subject}) => subject.equals(Status.$context)).length, 'Index should link to Status').to.equal(1)
         expect(index.$links.filter(({subject, rel}) => subject.equals(User.$context) && rel === 'newPassword').length, 'Index should link to Users\' newPassword relation').to.equal(1)
+        expect(index.$links.filter(({subject, rel}) => subject.equals(StaRHmap.$context)).length, 'Index should link to StaRHmap relation').to.equal(1)
         done()
       })
     })
