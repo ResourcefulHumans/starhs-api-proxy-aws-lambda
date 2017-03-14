@@ -34,7 +34,7 @@ describe('/staRHsStatus', () => {
       })
     }
     const status = staRHsStatusOperation(mockClient)
-    generateToken()
+    return generateToken()
       .then(token => status.post({}, ['some-user-name'], token)
         .then(
           /**

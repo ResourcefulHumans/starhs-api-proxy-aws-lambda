@@ -60,7 +60,7 @@ describe('/profile', () => {
       return Promise.resolve(mockProfileData)
     }
     const op = profileOperation(mountURL, mockClient)
-    generateToken()
+    return generateToken()
       .then(token => op.post({}, ['some-user-name'], token)
         .then(
           /**

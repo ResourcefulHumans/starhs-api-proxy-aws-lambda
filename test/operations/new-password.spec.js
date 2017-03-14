@@ -9,7 +9,7 @@ import {HttpProblem} from 'rheactor-models'
 import {StatusCodeError} from 'request-promise/errors'
 
 describe('/new-password', () => {
-  it('should reset the password', () => {
+  it('should reset the password', done => {
     const body = {
       username: 'someuser'
     }
@@ -17,6 +17,7 @@ describe('/new-password', () => {
     const mockClient = new StaRHsAPIClient('myapikey', 'apiuser', 'apipass')
     mockClient.sendNewPassword = (username) => {
       expect(username).to.equal(body.username)
+      done()
       return Promise.resolve({
         'Message': 'A new Password has been send'
       })
@@ -33,16 +34,18 @@ describe('/new-password', () => {
       [{}, 'ValidationError: child "username" fails because ["username" is required]'],
       [{username: ''}, 'ValidationError: child "username" fails because ["username" is not allowed to be empty]']
     ]
+    const p = []
     for (let i = 0; i < scenarios.length; i++) {
-      newPassword.post(scenarios[i][0])
+      p.push(newPassword.post(scenarios[i][0])
         .catch(err => {
           expect(err).to.be.instanceof(HttpProblem)
           expect(err.status).to.equal(400)
           expect(err.type.equals(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#ValidationFailed'))).to.equal(true)
           expect(err.title).to.equal(scenarios[i][1])
           expect(err.detail).to.not.equal(undefined)
-        })
+        }))
     }
+    return Promise.all(p)
   })
 
   it('should handle staRHs backend error 500 on invalid username', done => {
