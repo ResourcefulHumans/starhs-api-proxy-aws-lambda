@@ -3,23 +3,22 @@ import {Profile, StaRH} from 'starhs-models'
 import {JsonWebTokenType, Link} from 'rheactor-models'
 import {EmailValue, URIValue, URIValueType} from 'rheactor-value-objects'
 
-export const transformProfile = (apiClient, mountURL, username, response) => {
-  const profile = new Profile({
-    $id: new URIValue(`${mountURL}/profile/${response.PKUser}`),
-    email: new EmailValue(response.EMail.replace(/\s/g, '')),
-    firstname: response.Forename,
-    lastname: response.Name,
-    organization: response.Kunde1,
-    avatar: response.URLPicture ? new URIValue(response.URLPicture) : undefined
-  })
-  profile.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'shared'].join('/')), StaRH.$context, true, 'shared-staRHs'))
-  profile.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'received'].join('/')), StaRH.$context, true, 'received-staRHs'))
-  profile.$links.push(new Link(new URIValue([mountURL.toString(), 'colleagues', username].join('/')), Profile.$context, true, 'colleagues'))
-  profile.$links.push(new Link(new URIValue([mountURL.toString(), 'profileUpdate', username].join('/')), Profile.$context, false, 'update-profile'))
-  profile.$links.push(new Link(new URIValue([mountURL.toString(), 'avatarUpdate', username].join('/')), Profile.$context, false, 'update-avatar'))
-  profile.$links.push(new Link(new URIValue([mountURL.toString(), 'share'].join('/')), StaRH.$context, false, 'share-staRH'))
-  return profile
-}
+export const transformProfile = (apiClient, mountURL, username, response) => new Profile({
+  $id: new URIValue(`${mountURL}/profile/${response.PKUser}`),
+  email: new EmailValue(response.EMail.replace(/\s/g, '')),
+  firstname: response.Forename,
+  lastname: response.Name,
+  organization: response.Kunde1,
+  avatar: response.URLPicture ? new URIValue(response.URLPicture) : undefined,
+  $links: [
+    new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'shared'].join('/')), StaRH.$context, true, 'shared-staRHs'),
+    new Link(new URIValue([mountURL.toString(), 'staRHs', username, 'received'].join('/')), StaRH.$context, true, 'received-staRHs'),
+    new Link(new URIValue([mountURL.toString(), 'colleagues', username].join('/')), Profile.$context, true, 'colleagues'),
+    new Link(new URIValue([mountURL.toString(), 'profileUpdate', username].join('/')), Profile.$context, false, 'update-profile'),
+    new Link(new URIValue([mountURL.toString(), 'avatarUpdate', username].join('/')), Profile.$context, false, 'update-avatar'),
+    new Link(new URIValue([mountURL.toString(), 'share'].join('/')), StaRH.$context, false, 'share-staRH')
+  ]
+})
 
 /**
  * @param {URIValue} mountURL

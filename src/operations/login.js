@@ -17,7 +17,7 @@ export class LoginSuccess extends Model {
    * @param {{token: JsonWebToken}} fields
    */
   constructor (fields) {
-    super({$context})
+    super(Object.assign(fields, {$context}))
     const {token} = fields
     JsonWebTokenType(token)
     this.token = token
@@ -84,12 +84,14 @@ const login = (mountURL, apiClient, body) => {
         expiresIn: 60 * 60
       })
     )
-    .then(token => {
-      const result = new LoginSuccess({token: new JsonWebToken(token)})
-      result.$links.push(new Link(new URIValue([mountURL.toString(), 'profile', v.value.username].join('/')), Profile.$context))
-      result.$links.push(new Link(new URIValue([mountURL.toString(), 'staRHsStatus', v.value.username].join('/')), StaRHsStatus.$context))
-      return result
+    .then(token => new LoginSuccess({
+      token: new JsonWebToken(token),
+      $links: [
+        new Link(new URIValue([mountURL.toString(), 'profile', v.value.username].join('/')), Profile.$context),
+        new Link(new URIValue([mountURL.toString(), 'staRHsStatus', v.value.username].join('/')), StaRHsStatus.$context)
+      ]
     })
+    )
     .catch(StatusCodeError, reason => {
       if (reason.statusCode === 500 && reason.error.ExceptionMessage.match(/Login credentials wrong/)) {
         throw new HttpProblem(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Forbidden'), reason.error.ExceptionMessage, 403, JSON.stringify(reason.error))
