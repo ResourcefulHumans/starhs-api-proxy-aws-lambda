@@ -41,7 +41,7 @@ The credentials for the REST API are provided by Digital Bauhaus.
 :rocket: Deployment for this package is automated via [Travis CI](https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda/blob/master/.travis.yml).  
 **Every commit can potentially trigger a deploy.**
 
-If *lint* and *test* ran without error, [`semantic-release`](https://github.com/semantic-release/semantic-release) will be used to determine the next version for the package and that version string will be written to the `package.json`. After `semantic-release` has been run, [`make update`](https://github.com/ResourcefulHumans/accenture-configurator-backend/blob/master/Makefile) will be executed to deploy a new release. 
+If *lint* and *test* ran without error, [`semantic-release`](https://github.com/semantic-release/semantic-release) will be used to determine the next version for the package and that version string will be written to the `package.json`. After `semantic-release` has been run, [`make update`](https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda/blob/master/Makefile) will be executed to deploy a new release. 
 
 If a new version has been released by `semantic-release`, `make update` will update the Lambda code. It uses these environment variables (which are [provided via Travis](https://travis-ci.org/ResourcefulHumans/starhs-api-proxy-aws-lambda/settings)):
 
