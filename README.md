@@ -15,7 +15,7 @@ A proxy for the [staRHs API](https://github.com/ResourcefulHumans/staRHs-api) ru
 
 :earth_africa: <https://65isx1vpxe.execute-api.eu-central-1.amazonaws.com/prod>
 
-This API is hosted as the [`staRHsAPIproxy`](https://eu-central-1.console.aws.amazon.com/lambda/home?region=eu-central-1#/functions/staRHsAPIproxy?tab=code) AWS Lambda function and the HTTP endpoint is provided via the [staRHsAPI@prod](https://eu-central-1.console.aws.amazon.com/apigateway/home?region=eu-central-1#/apis/65isx1vpxe/stages/prod) API Gateway stage. 
+This API is hosted as the [`staRHsAPIproxy`](https://eu-central-1.console.aws.amazon.com/lambda/home?region=eu-central-1#/functions/staRHsAPIproxy?tab=code) AWS Lambda function and the HTTP endpoint is provided via the [`staRHsAPI@prod`](https://eu-central-1.console.aws.amazon.com/apigateway/home?region=eu-central-1#/apis/65isx1vpxe/stages/prod) API Gateway stage. 
 
 The Lambda function uses the role [`staRHsAPI`](https://console.aws.amazon.com/iam/home?region=eu-central-1#/roles/staRHsAPI).
 
