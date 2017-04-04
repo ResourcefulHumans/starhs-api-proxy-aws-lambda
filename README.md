@@ -45,8 +45,6 @@ If *lint* and *test* ran without error, [`semantic-release`](https://github.com/
 
 If a new version has been released by `semantic-release`, `make update` will update the Lambda code. It uses these environment variables (which are [provided via Travis](https://travis-ci.org/ResourcefulHumans/starhs-api-proxy-aws-lambda/settings)):
 
- * `AWS__ROLE`  
-   The role of the Lambda function
  * `AWS_ACCESS_KEY_ID`  
    The AWS access key to use
  * `AWS_SECRET_ACCESS_KEY`  
