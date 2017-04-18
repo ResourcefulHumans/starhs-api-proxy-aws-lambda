@@ -2,10 +2,10 @@
 
 import {expect} from 'chai'
 import {handler} from '../src'
-const contentType = 'application/vnd.resourceful-humans.starhs.v1+json'
-const headers = {'Content-type': contentType}
 import {Index, Status, User} from 'rheactor-models'
 import {StaRHmap} from 'starhs-models'
+const contentType = 'application/vnd.resourceful-humans.starhs.v1+json'
+const headers = {'Content-type': contentType}
 
 describe('handler', () => {
   describe('/index', () => {

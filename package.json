@@ -60,5 +60,8 @@
   },
   "standard": {
     "parser": "babel-eslint"
+  },
+  "engines": {
+    "node": ">=6.9.0"
   }
 }

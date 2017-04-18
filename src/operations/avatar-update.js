@@ -24,7 +24,7 @@ const avatarUpdate = (mountURL, apiClient, body, parts, token) => {
   if (v.error) {
     return Promise.reject(joiErrorToHttpProblem(v.error))
   }
-  return apiClient.updateAvatar(token.payload.SessionToken, new Buffer(v.value.file, 'base64').toString('binary')).then(response => '')
+  return apiClient.updateAvatar(token.payload.SessionToken, Buffer.from(v.value.file, 'base64').toString('binary')).then(response => '')
 }
 
 /**

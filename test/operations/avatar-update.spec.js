@@ -6,8 +6,8 @@ import {avatarUpdateOperation} from '../../src/operations/avatar-update'
 import Promise from 'bluebird'
 import {StaRHsAPIClient} from '../../src/apiclient'
 import {URIValue} from 'rheactor-value-objects'
-const mountURL = new URIValue('https://api.example.com/')
 import fs from 'fs'
+const mountURL = new URIValue('https://api.example.com/')
 
 describe('/avatarUpdate', () => {
   it('should update the avatar', done => {
@@ -21,6 +21,6 @@ describe('/avatarUpdate', () => {
     }
     const op = avatarUpdateOperation(mountURL, mockClient)
     generateToken()
-      .then(token => op.post({file: new Buffer(avatarData, 'binary').toString('base64')}, ['some-user-name'], token))
+      .then(token => op.post({file: Buffer.from(avatarData, 'binary').toString('base64')}, ['some-user-name'], token))
   })
 })

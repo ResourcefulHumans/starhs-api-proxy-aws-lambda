@@ -6,8 +6,8 @@ import {String as StringType, Date as DateType, Number as NumberType, irreducibl
 import {URIValue, URIValueType} from 'rheactor-value-objects'
 import fs from 'fs'
 import Promise from 'bluebird'
-Promise.promisifyAll(fs)
 import {v4} from 'uuid'
+Promise.promisifyAll(fs)
 
 const PositiveIntegerType = refinement(NumberType, n => n > 0 && n % 1 === 0, 'PositiveIntegerType')
 
