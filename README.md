@@ -15,7 +15,7 @@ A proxy for the [staRHs API](https://github.com/ResourcefulHumans/staRHs-api) ru
 
 :earth_africa: <https://65isx1vpxe.execute-api.eu-central-1.amazonaws.com/prod>
 
-This API is hosted as the [`staRHsAPIproxy`](https://eu-central-1.console.aws.amazon.com/lambda/home?region=eu-central-1#/functions/staRHsAPIproxy?tab=code) AWS Lambda function and the HTTP endpoint is provided via the [staRHsAPI@prod](https://eu-central-1.console.aws.amazon.com/apigateway/home?region=eu-central-1#/apis/65isx1vpxe/stages/prod) API Gateway stage. 
+This API is hosted as the [`staRHsAPIproxy`](https://eu-central-1.console.aws.amazon.com/lambda/home?region=eu-central-1#/functions/staRHsAPIproxy?tab=code) AWS Lambda function and the HTTP endpoint is provided via the [`staRHsAPI@prod`](https://eu-central-1.console.aws.amazon.com/apigateway/home?region=eu-central-1#/apis/65isx1vpxe/stages/prod) API Gateway stage. 
 
 The Lambda function uses the role [`staRHsAPI`](https://console.aws.amazon.com/iam/home?region=eu-central-1#/roles/staRHsAPI).
 
@@ -41,12 +41,10 @@ The credentials for the REST API are provided by Digital Bauhaus.
 :rocket: Deployment for this package is automated via [Travis CI](https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda/blob/master/.travis.yml).  
 **Every commit can potentially trigger a deploy.**
 
-If *lint* and *test* ran without error, [`semantic-release`](https://github.com/semantic-release/semantic-release) will be used to determine the next version for the package and that version string will be written to the `package.json`. After `semantic-release` has been run, [`make update`](https://github.com/ResourcefulHumans/accenture-configurator-backend/blob/master/Makefile) will be executed to deploy a new release. 
+If *lint* and *test* ran without error, [`semantic-release`](https://github.com/semantic-release/semantic-release) will be used to determine the next version for the package and that version string will be written to the `package.json`. After `semantic-release` has been run, [`make update`](https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda/blob/master/Makefile) will be executed to deploy a new release. 
 
 If a new version has been released by `semantic-release`, `make update` will update the Lambda code. It uses these environment variables (which are [provided via Travis](https://travis-ci.org/ResourcefulHumans/starhs-api-proxy-aws-lambda/settings)):
 
- * `AWS__ROLE`  
-   The role of the Lambda function
  * `AWS_ACCESS_KEY_ID`  
    The AWS access key to use
  * `AWS_SECRET_ACCESS_KEY`  
