@@ -36,7 +36,7 @@ describe('/login', () => {
         expect(success.token).to.be.instanceof(JsonWebToken)
         expect(success.token.iss).to.equal('login')
         expect(success.token.sub).to.equal(body.username)
-        const inOnHourinSeconds = Math.round((Date.now() + (60 * 60 * 1000)) / 1000)
+        const inOnHourinSeconds = Math.round((Date.now() + (60 * 60 * 2 * 1000)) / 1000)
         expect(Math.round(new Date(success.token.exp).getTime() / 1000)).to.be.within(inOnHourinSeconds - 10, inOnHourinSeconds + 10)
         jwt.verify(success.token.token, 'myapikey.apiuser.apipass')
         // Validate links
