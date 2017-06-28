@@ -81,7 +81,7 @@ const login = (mountURL, apiClient, body) => {
         algorithm: 'HS256',
         issuer: 'login',
         subject: v.value.username,
-        expiresIn: 60 * 60 * 24 * 365
+        expiresIn: 60 * 60
       })
     )
     .then(token => new LoginSuccess({
