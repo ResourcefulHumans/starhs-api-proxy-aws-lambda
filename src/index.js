@@ -9,6 +9,7 @@ import {avatarUpdateOperation} from './operations/avatar-update'
 import {staRHsListOperation} from './operations/starhs-list'
 import {colleagueListOperation} from './operations/colleagues-list'
 import {newPasswordOperation} from './operations/new-password'
+import {setNewPasswordOperation} from './operations/set-new-password'
 import {shareOperation} from './operations/share'
 import {staRHmapOperation} from './operations/starh-map'
 import {JsonWebToken, Status, Link, Index, User} from 'rheactor-models'
@@ -28,6 +29,7 @@ const operations = {
     new Link(mountURL.slashless().append('/status'), Status.$context),
     new Link(mountURL.slashless().append('/login'), JsonWebToken.$context),
     new Link(mountURL.slashless().append('/newPassword'), User.$context, false, 'newPassword'),
+    new Link(mountURL.slashless().append('/setNewPassword'), User.$context, false, 'setNewPassword'),
     new Link(mountURL.slashless().append('/staRHmap'), StaRHmap.$context)
   ])),
   login: loginOperation(mountURL, apiClient),
@@ -40,6 +42,7 @@ const operations = {
   colleagues: colleagueListOperation(mountURL, apiClient),
   status: statusOperation(version, environment, deployTime),
   newPassword: newPasswordOperation(apiClient),
+  setNewPassword: setNewPasswordOperation(apiClient),
   staRHmap: staRHmapOperation(apiClient)
 }
 

@@ -342,6 +342,32 @@ export class StaRHsAPIClient {
   }
 
   /**
+   * Sets a new password to the user.
+   *
+   * @link http://resourcefulhumans.github.io/staRHs-api/#profile_set_new_password_post
+   * @param {String} sessionToken
+   * @param {String} oldPassword
+   * @param {String} newPassword
+   * @return Promise<Object>
+   */
+  setNewPassword (sessionToken, oldPassword, newPassword) {
+    StringType(sessionToken)
+    StringType(oldPassword)
+    StringType(newPassword)
+    return rp(
+      {
+        method: 'POST',
+        uri: this.endpoint.slashless().toString() + '/profile/set-new-password',
+        headers: {
+          'SessionToken': sessionToken,
+          'OldPassword': oldPassword,
+          'NewPassword': newPassword
+        },
+        json: true
+      })
+  }
+
+  /**
    * @link http://resourcefulhumans.github.io/staRHs-api/#map_get_MapDataWithSession_get
    * @param {String} sessionToken
    * @param {Date} start
