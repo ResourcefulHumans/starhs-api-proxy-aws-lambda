@@ -21,6 +21,9 @@ describe('/avatarUpdate', () => {
     }
     const op = avatarUpdateOperation(mountURL, mockClient)
     generateToken()
-      .then(token => op.post({file: Buffer.from(avatarData, 'binary').toString('base64')}, ['some-user-name'], token))
+      .then(token => {
+        const imageBuffer = new Buffer(avatarData, 'binary') // eslint-disable-line
+        return op.post({file: imageBuffer.toString('base64')}, ['some-user-name'], token)
+      })
   })
 })
