@@ -1,6 +1,9 @@
 import {StaRHsAPIClientType} from '../apiclient'
 import Joi from 'joi'
 import {joiErrorToHttpProblem} from '../util'
+import {StatusCodeError} from 'request-promise/errors'
+import {HttpProblem} from 'rheactor-models'
+import {URIValue} from 'rheactor-value-objects'
 
 /**
  * @param {StaRHsAPIClient} apiClient
@@ -19,7 +22,16 @@ const setNewPassword = (apiClient, body, parts, token) => {
     return Promise.reject(joiErrorToHttpProblem(v.error))
   }
 
-  return apiClient.setNewPassword(token.payload.SessionToken, v.value.oldPassword, v.value.newPassword).then(response => '')
+  return apiClient
+    .setNewPassword(token.payload.SessionToken, v.value.oldPassword, v.value.newPassword)
+    .then(response => '')
+    .catch(StatusCodeError, reason => {
+      if (reason.statusCode === 500 && reason.error.ExceptionMessage.match(/OldPassword is wrong/)) {
+        throw new HttpProblem(new URIValue('https://github.com/ResourcefulHumans/starhs-api-proxy-aws-lambda#Forbidden'), 'Current password is wrong', 403, JSON.stringify(reason.error))
+      } else {
+        throw reason
+      }
+    })
 }
 
 /**
