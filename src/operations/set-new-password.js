@@ -8,7 +8,7 @@ import {joiErrorToHttpProblem} from '../util'
  * @param {JsonWebToken} token
  * @returns {Promise.<Object>}
  */
-const setNewPassword = (apiClient, body, token) => {
+const setNewPassword = (apiClient, body, parts, token) => {
   StaRHsAPIClientType(apiClient)
   const schema = Joi.object().keys({
     oldPassword: Joi.string().trim().required(),

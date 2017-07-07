@@ -27,7 +27,7 @@ describe('/set-new-password', () => {
 
     const newPassword = setNewPasswordOperation(mockClient)
     return generateToken()
-      .then(token => newPassword.post(body, token))
+      .then(token => newPassword.post(body, undefined, token))
   })
 
   it('should throw an exception if required data is missing', () => {
