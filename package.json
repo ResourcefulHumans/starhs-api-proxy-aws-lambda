@@ -39,7 +39,7 @@
     "rheactor-models": "^3.7.0",
     "rheactor-value-objects": "^10.0.0",
     "starhs-models": "^8.1.0",
-    "tcomb": "^3.2.20",
+    "tcomb": "^3.2.24",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
