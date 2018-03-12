@@ -34,7 +34,7 @@
     "jsonwebtoken": "^7.2.1",
     "moment": "^2.17.1",
     "nconf": "^0.8.4",
-    "request": "^2.81.0",
+    "request": "^2.85.0",
     "request-promise": "^4.1.1",
     "rheactor-models": "^3.7.0",
     "rheactor-value-objects": "^10.0.0",
