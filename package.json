@@ -31,7 +31,7 @@
     "@resourcefulhumans/rheactor-errors": "^1.1.0",
     "bluebird": "^3.4.7",
     "joi": "^10.2.1",
-    "jsonwebtoken": "^7.2.1",
+    "jsonwebtoken": "^8.2.1",
     "moment": "^2.17.1",
     "nconf": "^0.8.4",
     "request": "^2.81.0",
