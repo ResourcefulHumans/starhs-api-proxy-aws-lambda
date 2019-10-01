@@ -29,7 +29,7 @@
   "dependencies": {
     "@resourcefulhumans/rheactor-aws-lambda": "^3.2.0",
     "@resourcefulhumans/rheactor-errors": "^1.1.0",
-    "bluebird": "^3.4.7",
+    "bluebird": "^3.7.0",
     "joi": "^10.2.1",
     "jsonwebtoken": "^7.2.1",
     "moment": "^2.17.1",
